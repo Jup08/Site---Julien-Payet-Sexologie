@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Julien Payet — Sexothérapie à Albi</title>
+<meta name="description" content="Sexothérapie à Albi. Séances individuelles et séances de couple, prise en charge rapide, écoute confidentielle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,72,400;0,72,500;1,72,400;0,144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EF;
+    --bg-alt:#F1EAD9;
+    --ink:#3A2E22;
+    --ink-soft:#7A6F5F;
+    --accent:#2C3C33;
+    --accent-soft:#3F5349;
+    --line:#E1D8C5;
+    --rail:56px;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation:none !important; transition:none !important;}
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Public Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Newsreader', serif;
+    font-weight:500;
+    color:var(--ink);
+    margin:0;
+  }
+  a{color:var(--accent);}
+  :focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:2px;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  .eyebrow{
+    font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--ink-soft); font-weight:600; display:inline-block; margin-bottom:14px;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,246,239,0.92);
+    backdrop-filter:saturate(140%) blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; max-width:var(--maxw); margin:0 auto;
+  }
+  .logo{font-family:'Newsreader', serif; font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
+  .navlinks{display:flex; gap:30px; list-style:none; margin:0; padding:0; align-items:center;}
+  .navlinks a{text-decoration:none; font-size:0.95rem; color:var(--ink); font-weight:500;}
+  .navlinks a:hover{color:var(--accent);}
+  .navphone{
+    background:var(--accent); color:var(--bg); padding:9px 18px; border-radius:30px;
+    text-decoration:none; font-weight:600; font-size:0.9rem; white-space:nowrap;
+  }
+  @media (max-width:780px){ .navlinks{display:none;} }
+
+  /* ---------- HERO (simplifié, une colonne, pas de bloc décoratif) ---------- */
+  .hero{padding:120px 0 96px;}
+  .hero-inner{max-width:680px;}
+  .hero h1{font-size:clamp(2.1rem, 4vw, 3rem); line-height:1.2; letter-spacing:-0.01em;}
+  .hero p.lede{font-size:1.1rem; max-width:560px; margin:24px 0 32px; color:var(--ink);}
+  .cta-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block; padding:14px 26px; border-radius:8px; text-decoration:none;
+    font-weight:600; font-size:0.98rem; transition:background .15s ease, color .15s ease;
+  }
+  .btn-primary{background:var(--accent); color:var(--bg);}
+  .btn-primary:hover{background:var(--accent-soft);}
+  .btn-outline{background:transparent; color:var(--accent); border:1.5px solid var(--accent);}
+  .btn-outline:hover{background:var(--bg-alt);}
+  .reassure{margin-top:22px; font-size:0.88rem; color:var(--ink-soft);}
+  @media (max-width:900px){ .hero{padding:64px 0 48px;} }
+
+  /* ---------- JOURNEY (signature element) ---------- */
+  .journey{position:relative;}
+  .journey-step{
+    display:grid; grid-template-columns:var(--rail) 1fr; column-gap:36px;
+    padding:78px 0;
+  }
+  .rail-col{position:relative;}
+  .rail-col::before{
+    content:''; position:absolute; left:50%; top:0; bottom:0; width:2px;
+    background:var(--line); transform:translateX(-50%);
+  }
+  .journey-step:first-of-type .rail-col::before{top:50%;}
+  .journey-step:last-of-type .rail-col::before{bottom:50%;}
+  .dot{
+    position:absolute; left:50%; top:10px; width:11px; height:11px; border-radius:50%;
+    background:var(--accent); border:3px solid var(--bg); transform:translateX(-50%); z-index:2;
+  }
+  .railtag{
+    position:absolute; left:50%; top:34px; transform:translateX(-50%);
+    font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-soft);
+    text-align:center; width:120px; margin-left:-60px; font-weight:600;
+  }
+  .step-tag-mobile{display:none;}
+  @media (max-width:780px){
+    .journey-step{grid-template-columns:1fr; padding:48px 0;}
+    .rail-col{display:none;}
+    .step-tag-mobile{display:inline-block; margin-bottom:10px;}
+  }
+  .journey-step h2{font-size:1.7rem; margin-bottom:18px; max-width:640px;}
+  .journey-step .body-col p{max-width:640px; color:var(--ink);}
+
+  /* ---------- Qui suis-je : texte + portrait optionnel ---------- */
+  .qui-wrap{display:flex; gap:40px; align-items:flex-start; flex-wrap:wrap;}
+  .qui-portrait{
+    width:200px; height:200px; object-fit:cover; border-radius:12px;
+    flex:0 0 200px; display:none;
+  }
+  .qui-text{flex:1; min-width:240px;}
+
+  /* ---------- Liste "ce qui peut amener à consulter" : sobre, sans encadré ---------- */
+  .felt-list{list-style:none; margin:0; padding:0; max-width:680px;}
+  .felt-list li{
+    padding:18px 0; border-bottom:1px solid var(--line);
+    font-family:'Newsreader', serif; font-size:1.08rem; font-style:italic; color:var(--ink);
+  }
+  .felt-list li:last-child{border-bottom:none;}
+
+  .cards{display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:8px;}
+  @media (max-width:780px){.cards{grid-template-columns:1fr;}}
+  .card{background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:30px 28px;}
+  .card h3{font-size:1.25rem; margin-bottom:6px;}
+  .card .dur{font-size:0.82rem; color:var(--ink-soft); font-weight:600; letter-spacing:0.04em; text-transform:uppercase;}
+  .card p{color:var(--ink); margin:14px 0 20px;}
+  .card a{font-weight:600; font-size:0.92rem;}
+
+  .deroule-list{list-style:none; margin:18px 0 0; padding:0; max-width:680px;}
+  .deroule-list li{display:flex; gap:16px; padding:14px 0; border-bottom:1px solid var(--line);}
+  .deroule-list li:last-child{border-bottom:none;}
+  .deroule-list .k{font-weight:700; color:var(--ink); min-width:120px; font-size:0.92rem;}
+  .deroule-list .v{color:var(--ink-soft); font-size:0.96rem;}
+
+  /* ---------- BANNER (aplat uni, pas de dégradé) ---------- */
+  .banner{background:var(--accent); color:var(--bg); padding:64px 0;}
+  .banner .wrap{display:flex; align-items:center; gap:40px; flex-wrap:wrap;}
+  .banner h2{color:var(--bg); font-size:1.7rem; max-width:520px;}
+  .banner p{color:#E7E2D6; max-width:380px; margin:0;}
+
+  /* ---------- PRO CALLOUT (carte sobre, sans pointillés) ---------- */
+  .procall{
+    background:var(--bg-alt); border:1px solid var(--line); border-radius:14px; padding:30px 32px;
+    display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+    margin:0 0 100px;
+  }
+  .procall h3{font-size:1.15rem; margin-bottom:6px;}
+  .procall p{margin:0; color:var(--ink); font-size:0.95rem; max-width:440px;}
+
+  footer{background:var(--bg-alt); border-top:1px solid var(--line); padding:56px 0 36px;}
+  .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:36px;}
+  @media (max-width:780px){.foot-grid{grid-template-columns:1fr; gap:28px;}}
+  footer h4{font-family:'Newsreader',serif; color:var(--ink); font-size:1.1rem; margin:0 0 12px;}
+  footer p, footer a{color:var(--ink-soft); font-size:0.92rem; text-decoration:none;}
+  footer a:hover{color:var(--accent);}
+  .copyright{margin-top:44px; font-size:0.8rem; color:var(--ink-soft);}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="#" class="logo">Julien Payet</a>
+    <ul class="navlinks">
+      <li><a href="#parcours">Séances</a></li>
+      <li><a href="#qui">Qui suis-je</a></li>
+      <li><a href="#modalites">Modalités</a></li>
+      <li><a href="pro.html">Professionnels</a></li>
+    </ul>
+    <a class="navphone" data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a>
+  </nav>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div class="hero-inner">
+      <span class="eyebrow" data-text="hero_eyebrow">Sexothérapie — Albi</span>
+      <h1 data-text="hero_title">Ce dont on ne parle pas est souvent ce qui pèse le plus.</h1>
+      <p class="lede" data-text="hero_lede">J'accompagne, en séance individuelle ou en séance de couple, les questions, les blocages et les silences qui touchent à l'intimité et à la vie relationnelle.</p>
+      <div class="cta-row">
+        <a href="#individuel" class="btn btn-primary">Consulter seul·e</a>
+        <a href="#couple" class="btn btn-outline">Consulter en couple</a>
+      </div>
+      <p class="reassure" data-text="hero_reassure">Premier rendez-vous sous quelques jours · échange confidentiel · cabinet à Albi</p>
+    </div>
+  </section>
+
+  <div class="wrap journey" id="parcours">
+
+    <div class="journey-step">
+      <div class="rail-col"><div class="dot"></div><div class="railtag">Le point de départ</div></div>
+      <div class="body-col">
+        <span class="eyebrow step-tag-mobile">Le point de départ</span>
+        <h2>Ce qui peut vous amener à consulter</h2>
+        <ul class="felt-list" data-list="felt_list">
+          <li>Une baisse de désir qui s'installe, sans qu'on comprenne bien pourquoi.</li>
+          <li>Une douleur ou une appréhension qui rend le rapport difficile, parfois impossible.</li>
+          <li>Un silence qui s'est installé dans le couple autour de la sexualité.</li>
+          <li>Une question qu'on n'ose poser à personne, pas même à son médecin.</li>
+          <li>Un événement de vie — accouchement, maladie, rupture — qui a tout changé.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="rail-col"><div class="dot"></div><div class="railtag">Qui vous écoute</div></div>
+      <div class="body-col" id="qui">
+        <span class="eyebrow step-tag-mobile">Qui vous écoute</span>
+        <h2 data-text="qui_title">Praticien en sexologie, formé à l'écoute</h2>
+        <div class="qui-wrap" style="margin-top:18px;">
+          <img class="qui-portrait" data-img="qui_portrait" alt="Julien Payet" src="">
+          <p class="qui-text" data-text="qui_text">Après plusieurs années d'études en psychologie, je me suis spécialisé en sexologie pour accompagner ce qui touche à l'intime avec la même rigueur que le reste d'un parcours de soin. Mon rôle n'est pas de juger ce que vous vivez, mais de vous aider à en comprendre les causes et à retrouver un vécu plus apaisé — physique, émotionnel et relationnel.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="rail-col"><div class="dot"></div><div class="railtag">Deux façons de consulter</div></div>
+      <div class="body-col">
+        <span class="eyebrow step-tag-mobile">Deux façons de consulter</span>
+        <h2>Séance individuelle ou séance de couple</h2>
+        <div class="cards">
+          <div class="card" id="individuel">
+            <span class="dur">Séance individuelle · 1h</span>
+            <h3 data-text="individuel_title">En solo</h3>
+            <p data-text="individuel_text">Pour les questions, blocages ou douleurs qui vous concernent personnellement, indépendamment de votre situation relationnelle actuelle.</p>
+            <a data-tel="phone" href="tel:0662648890">Prendre rendez-vous →</a>
+          </div>
+          <div class="card" id="couple">
+            <span class="dur">Séance de couple · 1h</span>
+            <h3 data-text="couple_title">En couple</h3>
+            <p data-text="couple_text">Pour ce qui se joue à deux : désaccords de désir, silences installés, retentissement d'un événement de vie sur l'intimité partagée.</p>
+            <a data-tel="phone" href="tel:0662648890">Prendre rendez-vous →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="journey-step">
+      <div class="rail-col"><div class="dot"></div><div class="railtag">Le déroulement</div></div>
+      <div class="body-col">
+        <span class="eyebrow step-tag-mobile">Le déroulement</span>
+        <h2>Comment se déroule une séance</h2>
+        <ul class="deroule-list" data-list="deroulement_steps">
+          <li><span class="k">1er échange</span><span class="v">Par téléphone ou en cabinet, pour poser le cadre et clarifier votre demande.</span></li>
+          <li><span class="k">Les séances</span><span class="v">Une heure, à un rythme adapté à votre situation — il n'y a pas de protocole imposé.</span></li>
+          <li><span class="k">Confidentialité</span><span class="v">Rien de ce qui est échangé n'est partagé, y compris avec un médecin orienteur, sans votre accord explicite.</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="banner">
+    <div class="wrap">
+      <h2 data-text="banner_title">Vous n'avez pas à avoir les mots justes pour venir.</h2>
+      <p data-text="banner_text">C'est souvent en en parlant, simplement, que les choses commencent à se clarifier.</p>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-top:80px;" id="modalites">
+    <div class="journey-step" style="grid-template-columns:1fr; padding-top:0;">
+      <div class="body-col">
+        <span class="eyebrow">Modalités</span>
+        <h2>Tarifs &amp; pratique</h2>
+        <ul class="deroule-list" style="margin-top:24px;">
+          <li><span class="k">Durée</span><span class="v" data-text="mod_duree">1 heure par séance, individuelle ou de couple</span></li>
+          <li><span class="k">Lieu</span><span class="v" data-text="mod_lieu">74 rue de Jarlard, 81000 Albi</span></li>
+          <li><span class="k">Délai</span><span class="v" data-text="mod_delai">Prise en charge rapide, sans liste d'attente longue</span></li>
+          <li><span class="k">Contact</span><span class="v"><a data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a> — <a data-mail="email" data-text="email" href="mailto:payet.julien.msh@gmail.com">payet.julien.msh@gmail.com</a></span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="procall">
+      <div>
+        <h3 data-text="procall_title">Vous êtes médecin, sage-femme ou psychologue ?</h3>
+        <p data-text="procall_text">Une page dédiée présente les motifs d'orientation et mes modalités de prise en charge.</p>
+      </div>
+      <a href="pro.html" class="btn btn-outline">Espace professionnels →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <h4>Julien Payet — Sexothérapie</h4>
+      <p data-text="mod_lieu">74 rue de Jarlard, 81000 Albi</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><a data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a></p>
+      <p><a data-mail="email" data-text="email" href="mailto:payet.julien.msh@gmail.com">payet.julien.msh@gmail.com</a></p>
+    </div>
+    <div>
+      <h4>Navigation</h4>
+      <p><a href="#parcours">Séances</a></p>
+      <p><a href="pro.html">Professionnels de santé</a></p>
+    </div>
+  </div>
+  <div class="wrap copyright">© 2026 Julien Payet Sexologie</div>
+</footer>
+
+<script src="assets/cms.js"></script>
+<script>applyContent('content/home.json');</script>
+
+</body>
+</html>
