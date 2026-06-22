@@ -1,0 +1,29 @@
+{
+  "title": "Un relais pour les motifs qui ne se disent pas en quinze minutes de consultation",
+  "intro_text": "Praticien en sexologie à Albi, j'accompagne en séance individuelle ou de couple les patients confrontés à des difficultés sexuelles ou relationnelles. Cette page résume les principaux motifs d'orientation et mes modalités de prise en charge.",
+  "motifs_generaliste": [
+    "Plainte évoquée à demi-mot, sujet éludé en fin de consultation",
+    "Baisse de désir ou d'érection sans cause organique identifiée",
+    "Retentissement d'un traitement ou d'une maladie chronique sur la vie intime",
+    "Difficultés de couple avec composante sexuelle"
+  ],
+  "motifs_gyneco": [
+    "Dyspareunies, vaginisme, douleurs pelviennes sans étiologie somatique",
+    "Baisse du désir post-partum ou périménopause",
+    "Dysfonction érectile, troubles de l'éjaculation",
+    "Suites de chirurgie pelvienne, cancer, traitement hormonal"
+  ],
+  "motifs_psy": [
+    "Crise de couple avec dimension sexuelle non traitée en thérapie classique",
+    "Accompagnement spécialisé en complément d'un suivi en cours",
+    "Patient déjà suivi pour qui la sexualité reste un point aveugle"
+  ],
+  "modal_format": "Séances individuelles ou de couple, au cabinet, 1 heure",
+  "modal_delai": "Prise en charge rapide, sans liste d'attente longue",
+  "modal_adresse": "74 rue de Jarlard, 81000 Albi",
+  "modal_retour": "Possible avec l'accord explicite du patient",
+  "cta_title": "Échangeons directement",
+  "cta_text": "Je me tiens disponible pour un appel ou un court passage à votre cabinet afin de me présenter à votre équipe.",
+  "phone": "06 62 64 88 90",
+  "email": "payet.julien.msh@gmail.com"
+}

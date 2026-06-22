@@ -1,0 +1,85 @@
+# ============================================================
+# Configuration Decap CMS
+# Authentification gérée par DecapBridge (remplace Netlify Identity,
+# qui a été abandonné par Netlify). Voir decapbridge.com
+# ============================================================
+
+backend:
+  name: git-gateway
+  repo: VOTRE-PSEUDO-GITHUB/VOTRE-DEPOT       # à remplacer (étape DecapBridge du guide)
+  branch: main
+  identity_url: https://auth.decapbridge.com/sites/VOTRE-SITE-ID   # à remplacer
+  gateway_url: https://gateway.decapbridge.com
+
+media_folder: "images"
+public_folder: "images"
+
+collections:
+  - name: "accueil"
+    label: "Page d'accueil"
+    files:
+      - file: "content/home.json"
+        label: "Contenu de la page d'accueil"
+        name: "home"
+        fields:
+          - { label: "Bandeau (au-dessus du titre)", name: "hero_eyebrow", widget: "string" }
+          - { label: "Titre principal", name: "hero_title", widget: "string" }
+          - { label: "Texte sous le titre", name: "hero_lede", widget: "text" }
+          - { label: "Ligne de réassurance", name: "hero_reassure", widget: "string" }
+          - { label: "Citation (sur le visuel)", name: "hero_quote", widget: "string" }
+          - label: "Ce qui peut amener à consulter (liste de phrases)"
+            name: "felt_list"
+            widget: "list"
+            field: { label: "Phrase", name: "item", widget: "string" }
+          - { label: "Titre — Qui suis-je", name: "qui_title", widget: "string" }
+          - { label: "Photo (optionnel)", name: "qui_portrait", widget: "image", required: false }
+          - { label: "Texte — Qui suis-je", name: "qui_text", widget: "text" }
+          - { label: "Titre — séance individuelle", name: "individuel_title", widget: "string" }
+          - { label: "Texte — séance individuelle", name: "individuel_text", widget: "text" }
+          - { label: "Titre — séance de couple", name: "couple_title", widget: "string" }
+          - { label: "Texte — séance de couple", name: "couple_text", widget: "text" }
+          - label: "Déroulement d'une séance (étapes)"
+            name: "deroulement_steps"
+            widget: "list"
+            fields:
+              - { label: "Étape", name: "label", widget: "string" }
+              - { label: "Description", name: "text", widget: "string" }
+          - { label: "Titre du bandeau central", name: "banner_title", widget: "string" }
+          - { label: "Texte du bandeau central", name: "banner_text", widget: "string" }
+          - { label: "Modalités — durée", name: "mod_duree", widget: "string" }
+          - { label: "Modalités — lieu / adresse", name: "mod_lieu", widget: "string" }
+          - { label: "Modalités — délai de rendez-vous", name: "mod_delai", widget: "string" }
+          - { label: "Téléphone", name: "phone", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Encart pro — titre", name: "procall_title", widget: "string" }
+          - { label: "Encart pro — texte", name: "procall_text", widget: "string" }
+
+  - name: "professionnels"
+    label: "Espace professionnels"
+    files:
+      - file: "content/pro.json"
+        label: "Contenu de la page professionnels"
+        name: "pro"
+        fields:
+          - { label: "Titre principal", name: "title", widget: "string" }
+          - { label: "Texte d'introduction", name: "intro_text", widget: "text" }
+          - label: "Motifs — médecine générale"
+            name: "motifs_generaliste"
+            widget: "list"
+            field: { label: "Motif", name: "item", widget: "string" }
+          - label: "Motifs — gynécologie / sage-femme / urologie"
+            name: "motifs_gyneco"
+            widget: "list"
+            field: { label: "Motif", name: "item", widget: "string" }
+          - label: "Motifs — psychologues / thérapeutes de couple"
+            name: "motifs_psy"
+            widget: "list"
+            field: { label: "Motif", name: "item", widget: "string" }
+          - { label: "Modalités — format", name: "modal_format", widget: "string" }
+          - { label: "Modalités — délai", name: "modal_delai", widget: "string" }
+          - { label: "Modalités — adresse", name: "modal_adresse", widget: "string" }
+          - { label: "Modalités — retour au prescripteur", name: "modal_retour", widget: "string" }
+          - { label: "Encart contact — titre", name: "cta_title", widget: "string" }
+          - { label: "Encart contact — texte", name: "cta_text", widget: "string" }
+          - { label: "Téléphone", name: "phone", widget: "string" }
+          - { label: "Email", name: "email", widget: "string" }

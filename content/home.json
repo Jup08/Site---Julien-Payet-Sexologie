@@ -1,0 +1,35 @@
+{
+  "hero_eyebrow": "Sexothérapie — Albi",
+  "hero_title": "Ce dont on ne parle pas est souvent ce qui pèse le plus.",
+  "hero_lede": "J'accompagne, en séance individuelle ou en séance de couple, les questions, les blocages et les silences qui touchent à l'intimité et à la vie relationnelle.",
+  "hero_reassure": "Premier rendez-vous sous quelques jours · échange confidentiel · cabinet à Albi",
+  "hero_quote": "« Ce qui est dit ici reste ici. »",
+  "qui_portrait": "",
+  "felt_list": [
+    "Une baisse de désir qui s'installe, sans qu'on comprenne bien pourquoi.",
+    "Une douleur ou une appréhension qui rend le rapport difficile, parfois impossible.",
+    "Un silence qui s'est installé dans le couple autour de la sexualité.",
+    "Une question qu'on n'ose poser à personne, pas même à son médecin.",
+    "Un événement de vie — accouchement, maladie, rupture — qui a tout changé."
+  ],
+  "qui_title": "Praticien en sexologie, formé à l'écoute",
+  "qui_text": "Après plusieurs années d'études en psychologie, je me suis spécialisé en sexologie pour accompagner ce qui touche à l'intime avec la même rigueur que le reste d'un parcours de soin. Mon rôle n'est pas de juger ce que vous vivez, mais de vous aider à en comprendre les causes et à retrouver un vécu plus apaisé — physique, émotionnel et relationnel.",
+  "individuel_title": "En solo",
+  "individuel_text": "Pour les questions, blocages ou douleurs qui vous concernent personnellement, indépendamment de votre situation relationnelle actuelle.",
+  "couple_title": "En couple",
+  "couple_text": "Pour ce qui se joue à deux : désaccords de désir, silences installés, retentissement d'un événement de vie sur l'intimité partagée.",
+  "deroulement_steps": [
+    { "label": "1er échange", "text": "Par téléphone ou en cabinet, pour poser le cadre et clarifier votre demande." },
+    { "label": "Les séances", "text": "Une heure, à un rythme adapté à votre situation — il n'y a pas de protocole imposé." },
+    { "label": "Confidentialité", "text": "Rien de ce qui est échangé n'est partagé, y compris avec un médecin orienteur, sans votre accord explicite." }
+  ],
+  "banner_title": "Vous n'avez pas à avoir les mots justes pour venir.",
+  "banner_text": "C'est souvent en en parlant, simplement, que les choses commencent à se clarifier.",
+  "mod_duree": "1 heure par séance, individuelle ou de couple",
+  "mod_lieu": "74 rue de Jarlard, 81000 Albi",
+  "mod_delai": "Prise en charge rapide, sans liste d'attente longue",
+  "phone": "06 62 64 88 90",
+  "email": "payet.julien.msh@gmail.com",
+  "procall_title": "Vous êtes médecin, sage-femme ou psychologue ?",
+  "procall_text": "Une page dédiée présente les motifs d'orientation et mes modalités de prise en charge."
+}
