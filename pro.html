@@ -10,14 +10,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,72,400;0,72,500;1,72,400;0,144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FAF6EF; --bg-alt:#F1EAD9; --ink:#3A2E22; --ink-soft:#7A6F5F;
-    --accent:#2C3C33; --accent-soft:#3F5349; --line:#E1D8C5;
+    --bg:#FAF6EF; --bg-alt:#E8D9B4; --ink:#3A2E22; --ink-soft:#7A6F5F;
+    --accent:#2C3C33; --accent-soft:#3F5349; --on-accent:#F5F1E6; --on-accent-soft:#C7D3C3;
+    --line:#E1D8C5; --line-alt:#D7C797;
     --maxw:1120px;
   }
   *{box-sizing:border-box;}
   @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;}}
   body{margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', sans-serif; line-height:1.6;}
-  h1,h2,h3{font-family:'Newsreader', serif; font-weight:500; color:var(--ink); margin:0;}
+  h1,h2,h3{font-family:'Newsreader', serif; font-weight:500; color:inherit; margin:0;}
   a{color:var(--accent);}
   :focus-visible{outline:3px solid var(--accent); outline-offset:3px;}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
@@ -30,33 +31,38 @@
   .navlinks a{text-decoration:none; color:var(--ink); font-size:0.95rem; font-weight:500;}
   @media (max-width:780px){.navlinks{display:none;}}
 
-  .hero{padding:80px 0 60px; max-width:760px;}
-  .hero h1{font-size:clamp(1.9rem,3.6vw,2.6rem); line-height:1.25; margin:14px 0 18px;}
+  .block{padding:80px 0;}
+  .block-light{background:var(--bg);}
+  .block-sand{background:var(--bg-alt);}
+  .block-dark{background:var(--accent); color:var(--on-accent);}
+  .block-dark .eyebrow{color:var(--on-accent-soft);}
+  @media (max-width:780px){ .block{padding:52px 0;} }
+
+  .hero h1{font-size:clamp(1.9rem,3.6vw,2.6rem); line-height:1.25; margin:14px 0 18px; max-width:760px;}
   .hero p{font-size:1.08rem; color:var(--ink); max-width:620px;}
 
-  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin:36px 0 70px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
   @media (max-width:860px){.grid3{grid-template-columns:1fr;}}
-  .motif-card{background:var(--bg-alt); border:1px solid var(--line); border-radius:14px; padding:26px 24px;}
+  .motif-card{background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:26px 24px;}
   .motif-card h3{font-size:1.08rem; margin-bottom:14px;}
   .motif-card ul{margin:0; padding-left:18px; color:var(--ink); font-size:0.92rem;}
   .motif-card li{margin-bottom:8px;}
 
-  .modal-table{width:100%; border-collapse:collapse; margin:30px 0 60px; max-width:760px;}
-  .modal-table td{padding:14px 0; border-bottom:1px solid var(--line); vertical-align:top;}
+  .modal-table{width:100%; border-collapse:collapse; max-width:760px;}
+  .modal-table td{padding:14px 0; border-bottom:1px solid var(--line-alt); vertical-align:top;}
   .modal-table td:first-child{font-weight:700; color:var(--ink); width:200px; font-size:0.92rem;}
   .modal-table td:last-child{color:var(--ink-soft); font-size:0.96rem;}
 
   .cta-block{
-    background:var(--accent); color:var(--bg); border-radius:16px; padding:42px 40px;
-    display:flex; justify-content:space-between; align-items:center; gap:26px; flex-wrap:wrap; margin-bottom:90px;
+    display:flex; justify-content:space-between; align-items:center; gap:26px; flex-wrap:wrap;
   }
-  .cta-block h2{color:var(--bg); font-size:1.5rem; max-width:440px;}
-  .cta-block p{color:#E7E2D6; margin:10px 0 0; max-width:420px;}
+  .cta-block h2{font-size:1.5rem; max-width:440px;}
+  .cta-block p{color:var(--on-accent-soft); margin:10px 0 0; max-width:420px;}
   .btn{display:inline-block; padding:13px 24px; border-radius:8px; text-decoration:none; font-weight:600; font-size:0.95rem;}
   .btn-light{background:var(--bg); color:var(--accent);}
   .btn-light:hover{background:#fff;}
 
-  footer{background:var(--bg-alt); border-top:1px solid var(--line); padding:40px 0; font-size:0.85rem; color:var(--ink-soft);}
+  footer{background:var(--bg); border-top:1px solid var(--line); padding:40px 0; font-size:0.85rem; color:var(--ink-soft);}
   footer a{color:var(--ink-soft); text-decoration:none;}
 </style>
 </head>
@@ -70,57 +76,65 @@
   </nav>
 </header>
 
-<main class="wrap">
-  <section class="hero">
+<main>
+  <section class="wrap hero block-light" style="padding:72px 0 56px;">
     <span class="eyebrow">Espace professionnels de santé</span>
     <h1 data-text="title">Un relais pour les motifs qui ne se disent pas en quinze minutes de consultation</h1>
     <p data-text="intro_text">Praticien en sexologie à Albi, j'accompagne en séance individuelle ou de couple les patients confrontés à des difficultés sexuelles ou relationnelles. Cette page résume les principaux motifs d'orientation et mes modalités de prise en charge.</p>
   </section>
 
-  <section class="grid3">
-    <div class="motif-card">
-      <h3>Médecine générale</h3>
-      <ul data-list="motifs_generaliste">
-        <li>Plainte évoquée à demi-mot, sujet éludé en fin de consultation</li>
-        <li>Baisse de désir ou d'érection sans cause organique identifiée</li>
-        <li>Retentissement d'un traitement ou d'une maladie chronique sur la vie intime</li>
-        <li>Difficultés de couple avec composante sexuelle</li>
-      </ul>
-    </div>
-    <div class="motif-card">
-      <h3>Gynécologie, sage-femme, urologie</h3>
-      <ul data-list="motifs_gyneco">
-        <li>Dyspareunies, vaginisme, douleurs pelviennes sans étiologie somatique</li>
-        <li>Baisse du désir post-partum ou périménopause</li>
-        <li>Dysfonction érectile, troubles de l'éjaculation</li>
-        <li>Suites de chirurgie pelvienne, cancer, traitement hormonal</li>
-      </ul>
-    </div>
-    <div class="motif-card">
-      <h3>Psychologues, thérapeutes de couple</h3>
-      <ul data-list="motifs_psy">
-        <li>Crise de couple avec dimension sexuelle non traitée en thérapie classique</li>
-        <li>Accompagnement spécialisé en complément d'un suivi en cours</li>
-        <li>Patient déjà suivi pour qui la sexualité reste un point aveugle</li>
-      </ul>
+  <section class="block block-sand">
+    <div class="wrap grid3">
+      <div class="motif-card">
+        <h3>Médecine générale</h3>
+        <ul data-list="motifs_generaliste">
+          <li>Plainte évoquée à demi-mot, sujet éludé en fin de consultation</li>
+          <li>Baisse de désir ou d'érection sans cause organique identifiée</li>
+          <li>Retentissement d'un traitement ou d'une maladie chronique sur la vie intime</li>
+          <li>Difficultés de couple avec composante sexuelle</li>
+        </ul>
+      </div>
+      <div class="motif-card">
+        <h3>Gynécologie, sage-femme, urologie</h3>
+        <ul data-list="motifs_gyneco">
+          <li>Dyspareunies, vaginisme, douleurs pelviennes sans étiologie somatique</li>
+          <li>Baisse du désir post-partum ou périménopause</li>
+          <li>Dysfonction érectile, troubles de l'éjaculation</li>
+          <li>Suites de chirurgie pelvienne, cancer, traitement hormonal</li>
+        </ul>
+      </div>
+      <div class="motif-card">
+        <h3>Psychologues, thérapeutes de couple</h3>
+        <ul data-list="motifs_psy">
+          <li>Crise de couple avec dimension sexuelle non traitée en thérapie classique</li>
+          <li>Accompagnement spécialisé en complément d'un suivi en cours</li>
+          <li>Patient déjà suivi pour qui la sexualité reste un point aveugle</li>
+        </ul>
+      </div>
     </div>
   </section>
 
-  <h2 style="font-size:1.4rem; margin-bottom:6px;">Modalités de prise en charge</h2>
-  <table class="modal-table">
-    <tr><td>Format</td><td data-text="modal_format">Séances individuelles ou de couple, au cabinet, 1 heure</td></tr>
-    <tr><td>Délai de rendez-vous</td><td data-text="modal_delai">Prise en charge rapide, sans liste d'attente longue</td></tr>
-    <tr><td>Adresse</td><td data-text="modal_adresse">74 rue de Jarlard, 81000 Albi</td></tr>
-    <tr><td>Retour au prescripteur</td><td data-text="modal_retour">Possible avec l'accord explicite du patient</td></tr>
-  </table>
-
-  <div class="cta-block">
-    <div>
-      <h2 data-text="cta_title">Échangeons directement</h2>
-      <p data-text="cta_text">Je me tiens disponible pour un appel ou un court passage à votre cabinet afin de me présenter à votre équipe.</p>
+  <section class="block block-light">
+    <div class="wrap">
+      <h2 style="font-size:1.4rem; margin-bottom:6px;">Modalités de prise en charge</h2>
+      <table class="modal-table">
+        <tr><td>Format</td><td data-text="modal_format">Séances individuelles ou de couple, au cabinet, 1 heure</td></tr>
+        <tr><td>Délai de rendez-vous</td><td data-text="modal_delai">Prise en charge rapide, sans liste d'attente longue</td></tr>
+        <tr><td>Adresse</td><td data-text="modal_adresse">74 rue de Jarlard, 81000 Albi</td></tr>
+        <tr><td>Retour au prescripteur</td><td data-text="modal_retour">Possible avec l'accord explicite du patient</td></tr>
+      </table>
     </div>
-    <a data-tel="phone" data-text="phone" href="tel:0662648890" class="btn btn-light">06 62 64 88 90</a>
-  </div>
+  </section>
+
+  <section class="block block-dark">
+    <div class="wrap cta-block">
+      <div>
+        <h2 data-text="cta_title">Échangeons directement</h2>
+        <p data-text="cta_text">Je me tiens disponible pour un appel ou un court passage à votre cabinet afin de me présenter à votre équipe.</p>
+      </div>
+      <a data-tel="phone" data-text="phone" href="tel:0662648890" class="btn btn-light">06 62 64 88 90</a>
+    </div>
+  </section>
 </main>
 
 <footer>

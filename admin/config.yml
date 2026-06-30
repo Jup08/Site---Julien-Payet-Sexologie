@@ -6,9 +6,9 @@
 
 backend:
   name: git-gateway
-  repo: Jup08/Site---Julien-Payet-Sexologie       # à remplacer (étape DecapBridge du guide)
+  repo: VOTRE-PSEUDO-GITHUB/VOTRE-DEPOT       # à remplacer (étape DecapBridge du guide)
   branch: main
-  identity_url: https://auth.decapbridge.com/sites/44cf621d-c8bc-49bf-ac99-d09948f477d5  # à remplacer
+  identity_url: https://auth.decapbridge.com/sites/VOTRE-SITE-ID   # à remplacer
   gateway_url: https://gateway.decapbridge.com
 
 media_folder: "images"
@@ -38,6 +38,8 @@ collections:
           - { label: "Texte — séance individuelle", name: "individuel_text", widget: "text" }
           - { label: "Titre — séance de couple", name: "couple_title", widget: "string" }
           - { label: "Texte — séance de couple", name: "couple_text", widget: "text" }
+          - { label: "Titre — séance d'approfondissement", name: "approfondissement_title", widget: "string" }
+          - { label: "Texte — séance d'approfondissement", name: "approfondissement_text", widget: "text" }
           - label: "Déroulement d'une séance (étapes)"
             name: "deroulement_steps"
             widget: "list"
@@ -46,7 +48,9 @@ collections:
               - { label: "Description", name: "text", widget: "string" }
           - { label: "Titre du bandeau central", name: "banner_title", widget: "string" }
           - { label: "Texte du bandeau central", name: "banner_text", widget: "string" }
-          - { label: "Modalités — durée", name: "mod_duree", widget: "string" }
+          - { label: "Tarif — séance individuelle", name: "mod_tarif_individuel", widget: "string" }
+          - { label: "Tarif — séance de couple", name: "mod_tarif_couple", widget: "string" }
+          - { label: "Tarif — séance d'approfondissement", name: "mod_tarif_approfondissement", widget: "string" }
           - { label: "Modalités — lieu / adresse", name: "mod_lieu", widget: "string" }
           - { label: "Modalités — délai de rendez-vous", name: "mod_delai", widget: "string" }
           - { label: "Téléphone", name: "phone", widget: "string" }
