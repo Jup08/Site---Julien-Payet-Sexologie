@@ -1,142 +1,266 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ateliers relaxation &amp; interventions — Albi</title>
-  <meta name="description" content="Ateliers de relaxation et méditation guidée en petit groupe à Albi, et interventions psychoéducatives pour structures : vie de couple, communication, gestion du stress.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ateliers relaxation &amp; interventions — Albi | Julien Payet</title>
+<meta name="description" content="Ateliers de relaxation et méditation guidée en petit groupe à Albi, et interventions pour structures : vie relationnelle, communication, gestion du stress.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,72,400;0,72,500;1,72,400;0,144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EF;
+    --bg-alt:#E8D9B4;
+    --ink:#3A2E22;
+    --ink-soft:#7A6F5F;
+    --accent:#2C3C33;
+    --accent-soft:#3F5349;
+    --on-accent:#F5F1E6;
+    --on-accent-soft:#C7D3C3;
+    --line:#E1D8C5;
+    --line-alt:#D7C797;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation:none !important; transition:none !important;}
+  }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Public Sans', sans-serif; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Newsreader', serif; font-weight:500; color:inherit; margin:0;}
+  a{color:var(--accent);}
+  :focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:2px;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  .eyebrow{
+    font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:var(--ink-soft); font-weight:600; display:inline-block; margin-bottom:14px;
+  }
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --fond:#FBF8F4;--encre:#2D2A26;--prune:#5A3D5C;--prune-fonce:#432C45;
-      --sable:#EFE7DB;--ligne:#DDD2C3;
-      --police-titre:'Fraunces', Georgia, serif;
-      --police-texte:'Karla', 'Segoe UI', sans-serif;
-    }
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:var(--fond);color:var(--encre);font-family:var(--police-texte);line-height:1.65;font-size:1.05rem}
-    .conteneur{max-width:1060px;margin:0 auto;padding:0 1.25rem}
-    a{color:var(--prune)}
-    .entete{padding:4.5rem 0 3rem;text-align:center}
-    .entete .surtitre{letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;font-weight:700;color:var(--prune)}
-    .entete h1{font-family:var(--police-titre);font-weight:600;font-size:clamp(2rem,5vw,3rem);margin:.6rem 0 1rem}
-    .entete p{max-width:620px;margin:0 auto;font-size:1.1rem}
-    h2.section{font-family:var(--police-titre);font-weight:600;font-size:1.8rem;margin-bottom:1.2rem}
-    .bloc{background:var(--sable);border:1px solid var(--ligne);border-radius:14px;padding:2rem;margin-bottom:2.5rem}
-    .bloc h3{font-family:var(--police-titre);font-weight:600;font-size:1.4rem;margin-bottom:.8rem}
-    .bloc ul{list-style:none;margin:1rem 0}
-    .bloc li{padding-left:1.4rem;position:relative;margin-bottom:.5rem}
-    .bloc li::before{content:"—";position:absolute;left:0;color:var(--prune)}
-    .infos-cle{display:flex;flex-wrap:wrap;gap:1.5rem;margin:1.2rem 0;font-weight:700}
-    .infos-cle span{background:#fff;border:1px solid var(--ligne);border-radius:999px;padding:.4rem 1rem;font-size:.95rem}
-    .bouton{display:inline-block;background:var(--prune);color:#F7F1F7;text-decoration:none;font-weight:700;padding:.8rem 1.5rem;border-radius:999px}
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(250,246,239,0.92);
+    backdrop-filter:saturate(140%) blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px; max-width:var(--maxw); margin:0 auto;
+  }
+  .logo{font-family:'Newsreader', serif; font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
+  .navlinks{display:flex; gap:30px; list-style:none; margin:0; padding:0; align-items:center;}
+  .navlinks a{text-decoration:none; font-size:0.95rem; color:var(--ink); font-weight:500;}
+  .navlinks a:hover{color:var(--accent);}
+  .navphone{
+    background:var(--accent); color:var(--bg); padding:9px 18px; border-radius:30px;
+    text-decoration:none; font-weight:600; font-size:0.9rem; white-space:nowrap;
+  }
+  @media (max-width:780px){ .navlinks{display:none;} }
 
-    /* Formulaire */
-    form{display:grid;gap:1rem;max-width:520px;margin-top:1.5rem}
-    label{font-weight:700;font-size:.95rem}
-    input,select,textarea{width:100%;padding:.7rem;border:1px solid var(--ligne);border-radius:8px;font-family:inherit;font-size:1rem;background:#fff}
-    input:focus,select:focus,textarea:focus{outline:2px solid var(--prune)}
-    button{background:var(--prune);color:#F7F1F7;border:none;border-radius:999px;padding:.9rem 1.6rem;font-weight:700;font-size:1rem;cursor:pointer}
-    button:hover{background:var(--prune-fonce)}
-    .note-cadre{font-size:.9rem;color:#6B6258;border-left:3px solid var(--prune);padding-left:1rem;margin:0 0 4rem;max-width:720px}
-  </style>
+  /* ---------- BLOCS ---------- */
+  .block{padding:88px 0;}
+  .block-light{background:var(--bg); color:var(--ink);}
+  .block-sand{background:var(--bg-alt); color:var(--ink);}
+  .block-dark{background:var(--accent); color:var(--on-accent);}
+  .block-dark .eyebrow{color:var(--on-accent-soft);}
+  .block-dark h2, .block-dark h3{color:var(--on-accent);}
+  .block-dark a{color:var(--on-accent);}
+  @media (max-width:780px){ .block{padding:56px 0;} }
+  .block h2{font-size:1.7rem; margin-bottom:18px; max-width:640px;}
+  .block p{max-width:640px;}
+
+  .btn{
+    display:inline-block; padding:14px 26px; border-radius:8px; text-decoration:none;
+    font-weight:600; font-size:0.98rem; transition:background .15s ease, color .15s ease;
+  }
+  .btn-primary{background:var(--accent); color:var(--bg);}
+  .btn-primary:hover{background:var(--accent-soft);}
+
+  /* ---------- En-tête de page ---------- */
+  .pagehead{padding:96px 0 72px;}
+  .pagehead h1{font-size:clamp(2rem, 3.6vw, 2.7rem); line-height:1.2; max-width:680px;}
+  .pagehead p.lede{font-size:1.08rem; max-width:600px; margin:22px 0 0; color:var(--ink);}
+
+  /* ---------- Pastilles d'infos clés ---------- */
+  .infos-cle{display:flex; flex-wrap:wrap; gap:12px; margin:22px 0;}
+  .infos-cle span{
+    background:var(--bg); border:1px solid var(--line-alt); border-radius:30px;
+    padding:7px 16px; font-size:0.9rem; font-weight:600;
+  }
+  .block-light .infos-cle span{border-color:var(--line);}
+
+  /* ---------- Listes ---------- */
+  .liste{list-style:none; margin:16px 0 22px; padding:0; max-width:680px;}
+  .liste li{padding:10px 0 10px 24px; position:relative; border-bottom:1px solid var(--line-alt);}
+  .liste li:last-child{border-bottom:none;}
+  .liste li::before{content:"—"; position:absolute; left:0; color:var(--accent);}
+
+  /* ---------- Formulaire ---------- */
+  form{display:grid; gap:16px; max-width:520px; margin-top:26px;}
+  label{font-weight:600; font-size:0.92rem; display:block; margin-bottom:6px;}
+  input, select, textarea{
+    width:100%; padding:12px 14px; border:1px solid var(--line-alt); border-radius:8px;
+    font-family:'Public Sans', sans-serif; font-size:1rem; background:var(--bg); color:var(--ink);
+  }
+  input:focus, select:focus, textarea:focus{outline:3px solid var(--accent); outline-offset:1px;}
+  form button{
+    background:var(--accent); color:var(--bg); border:none; border-radius:8px;
+    padding:14px 26px; font-weight:600; font-size:0.98rem; cursor:pointer;
+    font-family:'Public Sans', sans-serif;
+  }
+  form button:hover{background:var(--accent-soft);}
+
+  .note-cadre{font-size:0.88rem; color:var(--ink-soft); border-left:3px solid var(--accent); padding-left:16px; max-width:680px; margin-top:10px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--bg); border-top:1px solid var(--line); padding:56px 0 36px;}
+  .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:36px;}
+  @media (max-width:780px){.foot-grid{grid-template-columns:1fr; gap:28px;}}
+  footer h4{font-family:'Newsreader',serif; color:var(--ink); font-size:1.1rem; margin:0 0 12px;}
+  footer p, footer a{color:var(--ink-soft); font-size:0.92rem; text-decoration:none;}
+  footer a:hover{color:var(--accent);}
+  .copyright{margin-top:44px; font-size:0.8rem; color:var(--ink-soft);}
+</style>
 </head>
 <body>
 
-<!-- Intégrez ici votre header/navigation habituel -->
+<header>
+  <nav class="nav">
+    <a href="index.html" class="logo">Julien Payet</a>
+    <ul class="navlinks">
+      <li><a href="accompagnements.html">Accompagnements</a></li>
+      <li><a href="ateliers.html">Ateliers</a></li>
+      <li><a href="index.html#qui">Qui suis-je</a></li>
+      <li><a href="index.html#modalites">Modalités</a></li>
+      <li><a href="pro.html">Professionnels</a></li>
+    </ul>
+    <a class="navphone" href="tel:0662648890">06 62 64 88 90</a>
+  </nav>
+</header>
 
-<main class="conteneur">
+<main>
 
-  <header class="entete">
-    <p class="surtitre">Ateliers &amp; interventions — Albi</p>
+  <section class="wrap pagehead">
+    <span class="eyebrow">Ateliers &amp; interventions — Albi</span>
     <h1>Souffler, comprendre, se reconnecter</h1>
-    <p>Des ateliers en petit groupe pour apprendre à relâcher la pression, et des interventions
-       sur mesure pour les structures qui souhaitent parler de relation, de communication et de
-       vie affective.</p>
-  </header>
+    <p class="lede">Des ateliers en petit groupe pour apprendre à relâcher la pression, et des
+       interventions sur mesure pour les structures qui souhaitent parler de relation, de
+       communication et de vie affective.</p>
+  </section>
 
   <!-- ================= ATELIERS GRAND PUBLIC ================= -->
-  <h2 class="section">Ateliers relaxation &amp; méditation guidée</h2>
-  <section class="bloc">
-    <h3>Une heure pour soi, en petit groupe</h3>
-    <p>Respiration guidée, relâchement musculaire, attention au corps et à l'instant&nbsp;: des
-       techniques simples, que vous repartez capable de pratiquer chez vous. Aucune expérience
-       nécessaire. Groupe limité à 8&nbsp;personnes pour préserver la qualité d'accompagnement.</p>
-    <div class="infos-cle">
-      <!-- MODIFIEZ ICI : lieu, jour, tarifs des ateliers -->
-      <span>1&nbsp;h</span>
-      <span>8&nbsp;personnes max.</span>
-      <span>18&nbsp;€ la séance</span>
-      <span>Carte 5&nbsp;séances&nbsp;: 75&nbsp;€</span>
-    </div>
-    <p><strong>Prochaines dates&nbsp;:</strong> publiées ci-dessous et sur la page d'accueil.
-       <!-- MODIFIEZ ICI : liste des prochaines dates -->
-    </p>
+  <section class="block block-sand" id="relaxation">
+    <div class="wrap">
+      <span class="eyebrow">Grand public</span>
+      <h2>Ateliers relaxation &amp; méditation guidée</h2>
+      <p>Respiration guidée, relâchement musculaire, attention au corps et à l'instant&nbsp;: des
+         techniques simples, que vous repartez capable de pratiquer chez vous. Aucune expérience
+         nécessaire. Groupe limité à 4&nbsp;personnes pour préserver la qualité d'accompagnement.</p>
+      <div class="infos-cle">
+        <!-- MODIFIEZ ICI : durée, tarifs des ateliers -->
+        <span>1&nbsp;h</span>
+        <span>4&nbsp;personnes max.</span>
+        <span>15&nbsp;€ la séance</span>
+        <span>Carte 5&nbsp;séances&nbsp;: 60&nbsp;€</span>
+      </div>
+      <p><strong>Prochaines dates&nbsp;:</strong> annoncées ici et lors de votre inscription.
+         <!-- MODIFIEZ ICI : liste des prochaines dates --></p>
 
-    <h3 style="margin-top:2rem">S'inscrire à un atelier</h3>
-    <!-- Formulaire géré par Netlify Forms : aucune configuration serveur nécessaire.
-         Les inscriptions arrivent dans l'onglet "Forms" de votre tableau de bord Netlify,
-         avec notification e-mail si vous l'activez (Site settings → Forms → Notifications). -->
-    <form name="inscription-atelier" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="inscription-atelier">
-      <p style="display:none"><label>Ne pas remplir&nbsp;: <input name="bot-field"></label></p>
-      <div>
-        <label for="nom">Votre nom</label>
-        <input type="text" id="nom" name="nom" required autocomplete="name">
-      </div>
-      <div>
-        <label for="email">Votre e-mail</label>
-        <input type="email" id="email" name="email" required autocomplete="email">
-      </div>
-      <div>
-        <label for="date-atelier">Date souhaitée</label>
-        <!-- MODIFIEZ ICI : les dates proposées -->
-        <select id="date-atelier" name="date-atelier" required>
-          <option value="">Choisir une date…</option>
-          <option>À définir — me tenir informé·e des prochaines dates</option>
-        </select>
-      </div>
-      <div>
-        <label for="message">Une question, une précision&nbsp;? (facultatif)</label>
-        <textarea id="message" name="message" rows="3"></textarea>
-      </div>
-      <button type="submit">Envoyer ma demande d'inscription</button>
-    </form>
+      <h3 style="margin-top:36px; font-size:1.25rem;">S'inscrire à un atelier</h3>
+      <!-- Formulaire géré par Netlify Forms : aucune configuration serveur nécessaire.
+           Les inscriptions arrivent dans l'onglet "Forms" de votre tableau de bord Netlify,
+           avec notification e-mail si vous l'activez (Site settings → Forms → Notifications). -->
+      <form name="inscription-atelier" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="inscription-atelier">
+        <p style="display:none"><label>Ne pas remplir&nbsp;: <input name="bot-field"></label></p>
+        <div>
+          <label for="nom">Votre nom</label>
+          <input type="text" id="nom" name="nom" required autocomplete="name">
+        </div>
+        <div>
+          <label for="email">Votre e-mail</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div>
+          <label for="date-atelier">Date souhaitée</label>
+          <!-- MODIFIEZ ICI : les dates proposées -->
+          <select id="date-atelier" name="date-atelier" required>
+            <option value="">Choisir une date…</option>
+            <option>Me tenir informé·e des prochaines dates</option>
+          </select>
+        </div>
+        <div>
+          <label for="message">Une question, une précision&nbsp;? (facultatif)</label>
+          <textarea id="message" name="message" rows="3"></textarea>
+        </div>
+        <button type="submit">Envoyer ma demande d'inscription</button>
+      </form>
+    </div>
   </section>
 
   <!-- ================= INTERVENTIONS STRUCTURES ================= -->
-  <h2 class="section">Interventions pour structures et collectifs</h2>
-  <section class="bloc">
-    <h3>Ateliers et conférences sur mesure</h3>
-    <p>Établissements scolaires, centres sociaux, associations, entreprises et comités sociaux&nbsp;:
-       j'interviens sur les thèmes de la vie relationnelle, affective et de la gestion du stress,
-       avec des formats adaptés à votre public.</p>
-    <ul>
-      <li><strong>Communication dans le couple</strong> — atelier interactif, 2&nbsp;h, adultes</li>
-      <li><strong>Gestion du stress et relaxation</strong> — atelier pratique, 1&nbsp;h à 2&nbsp;h, tout public</li>
-      <li><strong>Vie affective et relationnelle des adolescents</strong> — en co-animation avec vos
-          équipes (infirmière scolaire, CPE), dans le cadre du programme éducatif de l'établissement</li>
-    </ul>
-    <div class="infos-cle">
-      <!-- MODIFIEZ ICI : tarif interventions -->
-      <span>À partir de 150&nbsp;€ l'intervention</span>
-      <span>Devis sous 48&nbsp;h</span>
+  <section class="block block-dark" id="structures">
+    <div class="wrap">
+      <span class="eyebrow">Structures &amp; collectifs</span>
+      <h2>Ateliers et interventions sur mesure</h2>
+      <p style="color:var(--on-accent-soft);">Établissements scolaires, centres sociaux, associations,
+         entreprises et comités sociaux&nbsp;: j'interviens sur les thèmes de la vie relationnelle,
+         affective et de la gestion du stress, avec des formats adaptés à votre public.</p>
+      <ul class="liste" style="border-color:rgba(245,241,230,0.22);">
+        <li><strong>Communication dans le couple</strong> — atelier interactif, 2&nbsp;h, adultes</li>
+        <li><strong>Gestion du stress et relaxation</strong> — atelier pratique, 1&nbsp;h à 2&nbsp;h, tout public</li>
+        <li><strong>Vie affective et relationnelle des adolescents</strong> — en co-animation avec vos
+            équipes (infirmière scolaire, CPE), dans le cadre du programme éducatif de l'établissement</li>
+      </ul>
+      <div class="infos-cle">
+        <!-- MODIFIEZ ICI : tarif interventions -->
+        <span style="background:transparent; border-color:rgba(245,241,230,0.4); color:var(--on-accent);">À partir de 150&nbsp;€ l'intervention</span>
+        <span style="background:transparent; border-color:rgba(245,241,230,0.4); color:var(--on-accent);">Devis sous 48&nbsp;h</span>
+      </div>
+      <p style="color:var(--on-accent-soft); font-size:0.95rem;">Psychologie (licence), praticien
+         certifié en sexothérapie et thérapie de couple, cinq années d'expérience en établissement
+         scolaire.</p>
+      <p style="margin-top:22px;"><a class="btn btn-primary" style="background:var(--bg); color:var(--accent);" href="mailto:payet.julien.msh@gmail.com?subject=Demande%20de%20devis%20—%20intervention">Demander un devis</a></p>
     </div>
-    <p>Psychologie (licence), praticien certifié en sexothérapie et thérapie de couple,
-       cinq années d'expérience en établissement scolaire.</p>
-    <p style="margin-top:1.2rem"><a class="bouton" href="/contact.html">Demander un devis</a></p>
   </section>
 
-  <p class="note-cadre">Les ateliers de relaxation et de méditation guidée relèvent du bien-être et
-     de la gestion du stress. Ils ne constituent pas un acte médical ni une psychothérapie, et ne se
-     substituent pas à un suivi médical. Si votre situation le demande, je vous orienterai vers un
-     professionnel de santé adapté.</p>
+  <section class="block block-light" style="padding:56px 0;">
+    <div class="wrap">
+      <p class="note-cadre">Les ateliers de relaxation et de méditation guidée relèvent du bien-être
+         et de la gestion du stress. Ils ne constituent pas un acte médical ni une psychothérapie,
+         et ne se substituent pas à un suivi médical. Si votre situation le demande, je vous
+         orienterai vers un professionnel de santé adapté.</p>
+    </div>
+  </section>
 
 </main>
 
-<!-- Intégrez ici votre footer habituel -->
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <h4>Julien Payet — Sexothérapie</h4>
+      <p>74 rue de Jarlard, 81000 Albi</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p><a href="tel:0662648890">06 62 64 88 90</a></p>
+      <p><a href="mailto:payet.julien.msh@gmail.com">payet.julien.msh@gmail.com</a></p>
+    </div>
+    <div>
+      <h4>Navigation</h4>
+      <p><a href="accompagnements.html">Accompagnements</a></p>
+      <p><a href="ateliers.html">Ateliers</a></p>
+      <p><a href="pro.html">Professionnels de santé</a></p>
+    </div>
+  </div>
+  <div class="wrap copyright">© 2026 Julien Payet Sexologie</div>
+</footer>
 
 </body>
 </html>
