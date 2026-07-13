@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ateliers relaxation &amp; interventions — Albi</title>
+  <meta name="description" content="Ateliers de relaxation et méditation guidée en petit groupe à Albi, et interventions psychoéducatives pour structures : vie de couple, communication, gestion du stress.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --fond:#FBF8F4;--encre:#2D2A26;--prune:#5A3D5C;--prune-fonce:#432C45;
+      --sable:#EFE7DB;--ligne:#DDD2C3;
+      --police-titre:'Fraunces', Georgia, serif;
+      --police-texte:'Karla', 'Segoe UI', sans-serif;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--fond);color:var(--encre);font-family:var(--police-texte);line-height:1.65;font-size:1.05rem}
+    .conteneur{max-width:1060px;margin:0 auto;padding:0 1.25rem}
+    a{color:var(--prune)}
+    .entete{padding:4.5rem 0 3rem;text-align:center}
+    .entete .surtitre{letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;font-weight:700;color:var(--prune)}
+    .entete h1{font-family:var(--police-titre);font-weight:600;font-size:clamp(2rem,5vw,3rem);margin:.6rem 0 1rem}
+    .entete p{max-width:620px;margin:0 auto;font-size:1.1rem}
+    h2.section{font-family:var(--police-titre);font-weight:600;font-size:1.8rem;margin-bottom:1.2rem}
+    .bloc{background:var(--sable);border:1px solid var(--ligne);border-radius:14px;padding:2rem;margin-bottom:2.5rem}
+    .bloc h3{font-family:var(--police-titre);font-weight:600;font-size:1.4rem;margin-bottom:.8rem}
+    .bloc ul{list-style:none;margin:1rem 0}
+    .bloc li{padding-left:1.4rem;position:relative;margin-bottom:.5rem}
+    .bloc li::before{content:"—";position:absolute;left:0;color:var(--prune)}
+    .infos-cle{display:flex;flex-wrap:wrap;gap:1.5rem;margin:1.2rem 0;font-weight:700}
+    .infos-cle span{background:#fff;border:1px solid var(--ligne);border-radius:999px;padding:.4rem 1rem;font-size:.95rem}
+    .bouton{display:inline-block;background:var(--prune);color:#F7F1F7;text-decoration:none;font-weight:700;padding:.8rem 1.5rem;border-radius:999px}
+
+    /* Formulaire */
+    form{display:grid;gap:1rem;max-width:520px;margin-top:1.5rem}
+    label{font-weight:700;font-size:.95rem}
+    input,select,textarea{width:100%;padding:.7rem;border:1px solid var(--ligne);border-radius:8px;font-family:inherit;font-size:1rem;background:#fff}
+    input:focus,select:focus,textarea:focus{outline:2px solid var(--prune)}
+    button{background:var(--prune);color:#F7F1F7;border:none;border-radius:999px;padding:.9rem 1.6rem;font-weight:700;font-size:1rem;cursor:pointer}
+    button:hover{background:var(--prune-fonce)}
+    .note-cadre{font-size:.9rem;color:#6B6258;border-left:3px solid var(--prune);padding-left:1rem;margin:0 0 4rem;max-width:720px}
+  </style>
+</head>
+<body>
+
+<!-- Intégrez ici votre header/navigation habituel -->
+
+<main class="conteneur">
+
+  <header class="entete">
+    <p class="surtitre">Ateliers &amp; interventions — Albi</p>
+    <h1>Souffler, comprendre, se reconnecter</h1>
+    <p>Des ateliers en petit groupe pour apprendre à relâcher la pression, et des interventions
+       sur mesure pour les structures qui souhaitent parler de relation, de communication et de
+       vie affective.</p>
+  </header>
+
+  <!-- ================= ATELIERS GRAND PUBLIC ================= -->
+  <h2 class="section">Ateliers relaxation &amp; méditation guidée</h2>
+  <section class="bloc">
+    <h3>Une heure pour soi, en petit groupe</h3>
+    <p>Respiration guidée, relâchement musculaire, attention au corps et à l'instant&nbsp;: des
+       techniques simples, que vous repartez capable de pratiquer chez vous. Aucune expérience
+       nécessaire. Groupe limité à 8&nbsp;personnes pour préserver la qualité d'accompagnement.</p>
+    <div class="infos-cle">
+      <!-- MODIFIEZ ICI : lieu, jour, tarifs des ateliers -->
+      <span>1&nbsp;h</span>
+      <span>8&nbsp;personnes max.</span>
+      <span>18&nbsp;€ la séance</span>
+      <span>Carte 5&nbsp;séances&nbsp;: 75&nbsp;€</span>
+    </div>
+    <p><strong>Prochaines dates&nbsp;:</strong> publiées ci-dessous et sur la page d'accueil.
+       <!-- MODIFIEZ ICI : liste des prochaines dates -->
+    </p>
+
+    <h3 style="margin-top:2rem">S'inscrire à un atelier</h3>
+    <!-- Formulaire géré par Netlify Forms : aucune configuration serveur nécessaire.
+         Les inscriptions arrivent dans l'onglet "Forms" de votre tableau de bord Netlify,
+         avec notification e-mail si vous l'activez (Site settings → Forms → Notifications). -->
+    <form name="inscription-atelier" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="inscription-atelier">
+      <p style="display:none"><label>Ne pas remplir&nbsp;: <input name="bot-field"></label></p>
+      <div>
+        <label for="nom">Votre nom</label>
+        <input type="text" id="nom" name="nom" required autocomplete="name">
+      </div>
+      <div>
+        <label for="email">Votre e-mail</label>
+        <input type="email" id="email" name="email" required autocomplete="email">
+      </div>
+      <div>
+        <label for="date-atelier">Date souhaitée</label>
+        <!-- MODIFIEZ ICI : les dates proposées -->
+        <select id="date-atelier" name="date-atelier" required>
+          <option value="">Choisir une date…</option>
+          <option>À définir — me tenir informé·e des prochaines dates</option>
+        </select>
+      </div>
+      <div>
+        <label for="message">Une question, une précision&nbsp;? (facultatif)</label>
+        <textarea id="message" name="message" rows="3"></textarea>
+      </div>
+      <button type="submit">Envoyer ma demande d'inscription</button>
+    </form>
+  </section>
+
+  <!-- ================= INTERVENTIONS STRUCTURES ================= -->
+  <h2 class="section">Interventions pour structures et collectifs</h2>
+  <section class="bloc">
+    <h3>Ateliers et conférences sur mesure</h3>
+    <p>Établissements scolaires, centres sociaux, associations, entreprises et comités sociaux&nbsp;:
+       j'interviens sur les thèmes de la vie relationnelle, affective et de la gestion du stress,
+       avec des formats adaptés à votre public.</p>
+    <ul>
+      <li><strong>Communication dans le couple</strong> — atelier interactif, 2&nbsp;h, adultes</li>
+      <li><strong>Gestion du stress et relaxation</strong> — atelier pratique, 1&nbsp;h à 2&nbsp;h, tout public</li>
+      <li><strong>Vie affective et relationnelle des adolescents</strong> — en co-animation avec vos
+          équipes (infirmière scolaire, CPE), dans le cadre du programme éducatif de l'établissement</li>
+    </ul>
+    <div class="infos-cle">
+      <!-- MODIFIEZ ICI : tarif interventions -->
+      <span>À partir de 150&nbsp;€ l'intervention</span>
+      <span>Devis sous 48&nbsp;h</span>
+    </div>
+    <p>Psychologie (licence), praticien certifié en sexothérapie et thérapie de couple,
+       cinq années d'expérience en établissement scolaire.</p>
+    <p style="margin-top:1.2rem"><a class="bouton" href="/contact.html">Demander un devis</a></p>
+  </section>
+
+  <p class="note-cadre">Les ateliers de relaxation et de méditation guidée relèvent du bien-être et
+     de la gestion du stress. Ils ne constituent pas un acte médical ni une psychothérapie, et ne se
+     substituent pas à un suivi médical. Si votre situation le demande, je vous orienterai vers un
+     professionnel de santé adapté.</p>
+
+</main>
+
+<!-- Intégrez ici votre footer habituel -->
+
+</body>
+</html>
