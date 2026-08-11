@@ -45,7 +45,7 @@
   }
   a{color:var(--accent);}
   :focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:2px;}
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(24px, 6vw, 72px);}
   .eyebrow{
     font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase;
     color:var(--ink-soft); font-weight:600; display:inline-block; margin-bottom:14px;
@@ -60,7 +60,7 @@
   }
   .nav{
     display:flex; align-items:center; justify-content:space-between;
-    padding:18px 28px; max-width:var(--maxw); margin:0 auto;
+    padding:18px clamp(24px, 6vw, 72px); max-width:var(--maxw); margin:0 auto;
   }
   .logo{font-family:'Newsreader', serif; font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
   .navlinks{display:flex; gap:30px; list-style:none; margin:0; padding:0; align-items:center;}
@@ -161,7 +161,7 @@
   <nav class="nav">
     <a href="#" class="logo">Julien Payet</a>
     <ul class="navlinks">
-      <li><a href="accompagnements.html">Accompagnements</a></li>
+      <li><a href="#parcours">Séances</a></li>
       <li><a href="ateliers.html">Ateliers</a></li>
       <li><a href="#qui">Qui suis-je</a></li>
       <li><a href="#modalites">Modalités</a></li>
@@ -194,14 +194,14 @@
         <div class="card">
           <span class="dur">En couple</span>
           <h3>Une difficulté à deux</h3>
-          <p>Conflits qui reviennent, dialogue rompu, intimité en souffrance&nbsp;: un parcours structuré pour vous retrouver, à deux.</p>
-          <a href="accompagnements.html">Découvrir le Parcours Couple →</a>
+          <p>Conflits qui reviennent, dialogue rompu, intimité en souffrance&nbsp;: un espace pour vous retrouver, à deux.</p>
+          <a href="#couple">Voir la séance de couple →</a>
         </div>
         <div class="card">
           <span class="dur">En individuel</span>
           <h3>Travailler sur votre intimité</h3>
           <p>Désir, confiance, blocages, rapport au corps&nbsp;: un accompagnement à votre rythme, au cabinet ou en visio.</p>
-          <a href="accompagnements.html">Découvrir les parcours →</a>
+          <a href="#individuel">Voir la séance individuelle →</a>
         </div>
         <div class="card">
           <span class="dur">Ateliers · petit groupe</span>
@@ -325,7 +325,7 @@
     </div>
     <div>
       <h4>Navigation</h4>
-      <p><a href="accompagnements.html">Accompagnements</a></p>
+      <p><a href="#parcours">Séances</a></p>
       <p><a href="ateliers.html">Ateliers</a></p>
       <p><a href="pro.html">Professionnels de santé</a></p>
     </div>

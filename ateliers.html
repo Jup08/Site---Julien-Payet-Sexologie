@@ -4,66 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ateliers relaxation &amp; interventions — Albi | Julien Payet</title>
-<meta name="description" content="Ateliers de relaxation et méditation guidée en petit groupe à Albi, et interventions pour structures : vie relationnelle, communication, gestion du stress.">
+<meta name="description" content="Ateliers de relaxation et méditation guidée à Albi : atelier libre Respirer & se poser, et cinq cycles thématiques en 3 séances. Réservation en ligne.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,72,400;0,72,500;1,72,400;0,144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FAF6EF;
-    --bg-alt:#E8D9B4;
-    --ink:#3A2E22;
-    --ink-soft:#7A6F5F;
-    --accent:#2C3C33;
-    --accent-soft:#3F5349;
-    --on-accent:#F5F1E6;
-    --on-accent-soft:#C7D3C3;
-    --line:#E1D8C5;
-    --line-alt:#D7C797;
-    --maxw:1120px;
+    --bg:#FAF6EF; --bg-alt:#E8D9B4; --ink:#3A2E22; --ink-soft:#7A6F5F;
+    --accent:#2C3C33; --accent-soft:#3F5349; --on-accent:#F5F1E6; --on-accent-soft:#C7D3C3;
+    --line:#E1D8C5; --line-alt:#D7C797; --maxw:1120px;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    *{animation:none !important; transition:none !important;}
-  }
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:'Public Sans', sans-serif; line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation:none !important; transition:none !important;} }
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;}
   h1,h2,h3{font-family:'Newsreader', serif; font-weight:500; color:inherit; margin:0;}
   a{color:var(--accent);}
   :focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:2px;}
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
-  .eyebrow{
-    font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase;
-    color:var(--ink-soft); font-weight:600; display:inline-block; margin-bottom:14px;
-  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(24px, 6vw, 72px);}
+  .eyebrow{font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; display:inline-block; margin-bottom:14px;}
 
-  /* ---------- HEADER ---------- */
-  header{
-    position:sticky; top:0; z-index:50;
-    background:rgba(250,246,239,0.92);
-    backdrop-filter:saturate(140%) blur(6px);
-    border-bottom:1px solid var(--line);
-  }
-  .nav{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:18px 28px; max-width:var(--maxw); margin:0 auto;
-  }
+  header{position:sticky; top:0; z-index:50; background:rgba(250,246,239,0.92); backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid var(--line);}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px clamp(24px, 6vw, 72px); max-width:var(--maxw); margin:0 auto;}
   .logo{font-family:'Newsreader', serif; font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
   .navlinks{display:flex; gap:30px; list-style:none; margin:0; padding:0; align-items:center;}
   .navlinks a{text-decoration:none; font-size:0.95rem; color:var(--ink); font-weight:500;}
   .navlinks a:hover{color:var(--accent);}
-  .navphone{
-    background:var(--accent); color:var(--bg); padding:9px 18px; border-radius:30px;
-    text-decoration:none; font-weight:600; font-size:0.9rem; white-space:nowrap;
-  }
+  .navphone{background:var(--accent); color:var(--bg); padding:9px 18px; border-radius:30px; text-decoration:none; font-weight:600; font-size:0.9rem; white-space:nowrap;}
   @media (max-width:780px){ .navlinks{display:none;} }
 
-  /* ---------- BLOCS ---------- */
   .block{padding:88px 0;}
   .block-light{background:var(--bg); color:var(--ink);}
   .block-sand{background:var(--bg-alt); color:var(--ink);}
@@ -71,54 +40,46 @@
   .block-dark .eyebrow{color:var(--on-accent-soft);}
   .block-dark h2, .block-dark h3{color:var(--on-accent);}
   .block-dark a{color:var(--on-accent);}
+  .block-dark p{color:var(--on-accent-soft);}
   @media (max-width:780px){ .block{padding:56px 0;} }
   .block h2{font-size:1.7rem; margin-bottom:18px; max-width:640px;}
-  .block p{max-width:640px;}
+  .block > .wrap > p.lede{max-width:640px;}
 
-  .btn{
-    display:inline-block; padding:14px 26px; border-radius:8px; text-decoration:none;
-    font-weight:600; font-size:0.98rem; transition:background .15s ease, color .15s ease;
-  }
+  .btn{display:inline-block; padding:14px 26px; border-radius:8px; text-decoration:none; font-weight:600; font-size:0.98rem; transition:background .15s ease, color .15s ease;}
   .btn-primary{background:var(--accent); color:var(--bg);}
   .btn-primary:hover{background:var(--accent-soft);}
+  .block-dark .btn-primary{background:var(--bg); color:var(--accent);}
+  .block-dark .btn-primary:hover{background:var(--on-accent);}
 
-  /* ---------- En-tête de page ---------- */
   .pagehead{padding:96px 0 72px;}
   .pagehead h1{font-size:clamp(2rem, 3.6vw, 2.7rem); line-height:1.2; max-width:680px;}
   .pagehead p.lede{font-size:1.08rem; max-width:600px; margin:22px 0 0; color:var(--ink);}
 
-  /* ---------- Pastilles d'infos clés ---------- */
   .infos-cle{display:flex; flex-wrap:wrap; gap:12px; margin:22px 0;}
-  .infos-cle span{
-    background:var(--bg); border:1px solid var(--line-alt); border-radius:30px;
-    padding:7px 16px; font-size:0.9rem; font-weight:600;
-  }
-  .block-light .infos-cle span{border-color:var(--line);}
+  .infos-cle span{background:var(--bg); border:1px solid var(--line-alt); border-radius:30px; padding:7px 16px; font-size:0.9rem; font-weight:600;}
+  .block-sand .infos-cle span{background:var(--bg);}
+  .block-dark .infos-cle span{background:transparent; border-color:rgba(245,241,230,0.4); color:var(--on-accent);}
 
-  /* ---------- Listes ---------- */
   .liste{list-style:none; margin:16px 0 22px; padding:0; max-width:680px;}
   .liste li{padding:10px 0 10px 24px; position:relative; border-bottom:1px solid var(--line-alt);}
   .liste li:last-child{border-bottom:none;}
   .liste li::before{content:"—"; position:absolute; left:0; color:var(--accent);}
 
-  /* ---------- Formulaire ---------- */
-  form{display:grid; gap:16px; max-width:520px; margin-top:26px;}
-  label{font-weight:600; font-size:0.92rem; display:block; margin-bottom:6px;}
-  input, select, textarea{
-    width:100%; padding:12px 14px; border:1px solid var(--line-alt); border-radius:8px;
-    font-family:'Public Sans', sans-serif; font-size:1rem; background:var(--bg); color:var(--ink);
-  }
-  input:focus, select:focus, textarea:focus{outline:3px solid var(--accent); outline-offset:1px;}
-  form button{
-    background:var(--accent); color:var(--bg); border:none; border-radius:8px;
-    padding:14px 26px; font-weight:600; font-size:0.98rem; cursor:pointer;
-    font-family:'Public Sans', sans-serif;
-  }
-  form button:hover{background:var(--accent-soft);}
+  .cycles{display:flex; flex-direction:column; gap:18px; margin-top:8px;}
+  .cycle-card{background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:26px 28px; display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start;}
+  .cycle-dot{width:12px; height:12px; border-radius:3px; margin-top:8px; flex-shrink:0;}
+  .cycle-body{flex:1; min-width:240px;}
+  .cycle-period{font-size:0.8rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px;}
+  .cycle-body h3{font-size:1.3rem; margin-bottom:8px;}
+  .cycle-body p{margin:0 0 14px; font-size:0.96rem; max-width:560px;}
+  .cycle-steps{display:flex; gap:10px; flex-wrap:wrap;}
+  .cycle-steps span{font-size:0.82rem; font-weight:600; background:var(--bg-alt); border-radius:20px; padding:5px 14px; color:var(--ink);}
+  .cycle-price{white-space:nowrap; text-align:right; padding-top:4px;}
+  .cycle-price .montant{font-family:'Newsreader', serif; font-size:1.5rem; color:var(--accent); display:block;}
+  .cycle-price .detail{font-size:0.8rem; color:var(--ink-soft);}
 
   .note-cadre{font-size:0.88rem; color:var(--ink-soft); border-left:3px solid var(--accent); padding-left:16px; max-width:680px; margin-top:10px;}
 
-  /* ---------- FOOTER ---------- */
   footer{background:var(--bg); border-top:1px solid var(--line); padding:56px 0 36px;}
   .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:36px;}
   @media (max-width:780px){.foot-grid{grid-template-columns:1fr; gap:28px;}}
@@ -134,7 +95,7 @@
   <nav class="nav">
     <a href="index.html" class="logo">Julien Payet</a>
     <ul class="navlinks">
-      <li><a href="accompagnements.html">Accompagnements</a></li>
+      <li><a href="index.html#parcours">Séances</a></li>
       <li><a href="ateliers.html">Ateliers</a></li>
       <li><a href="index.html#qui">Qui suis-je</a></li>
       <li><a href="index.html#modalites">Modalités</a></li>
@@ -147,71 +108,124 @@
 <main>
 
   <section class="wrap pagehead">
-    <span class="eyebrow">Ateliers &amp; interventions — Albi</span>
+    <span class="eyebrow">Ateliers — Albi</span>
     <h1>Souffler, comprendre, se reconnecter</h1>
-    <p class="lede">Des ateliers en petit groupe pour apprendre à relâcher la pression, et des
-       interventions sur mesure pour les structures qui souhaitent parler de relation, de
-       communication et de vie affective.</p>
+    <p class="lede">Un atelier d'entrée libre pour souffler quand vous en avez besoin, et cinq cycles
+       thématiques de trois séances pour aller plus loin sur un sujet précis — à votre rythme,
+       sans engagement au-delà de la séance réservée.</p>
   </section>
 
-  <!-- ================= ATELIERS GRAND PUBLIC ================= -->
-  <section class="block block-sand" id="relaxation">
+  <section class="block block-sand" id="respirer">
     <div class="wrap">
-      <span class="eyebrow">Grand public</span>
-      <h2>Ateliers relaxation &amp; méditation guidée</h2>
-      <p>Respiration guidée, relâchement musculaire, attention au corps et à l'instant&nbsp;: des
-         techniques simples, que vous repartez capable de pratiquer chez vous. Aucune expérience
-         nécessaire. Groupe limité à 4&nbsp;personnes pour préserver la qualité d'accompagnement.</p>
+      <span class="eyebrow">Entrée libre — sans cycle</span>
+      <h2>Respirer &amp; se poser</h2>
+      <p class="lede">Respiration guidée, détente musculaire progressive et retour au calme. Aucune
+         expérience nécessaire : c'est la porte d'entrée, ouverte à tout moment, sans engagement.</p>
       <div class="infos-cle">
-        <!-- MODIFIEZ ICI : durée, tarifs des ateliers -->
         <span>1&nbsp;h</span>
         <span>4&nbsp;personnes max.</span>
         <span>15&nbsp;€ la séance</span>
         <span>Carte 5&nbsp;séances&nbsp;: 60&nbsp;€</span>
       </div>
-      <p><strong>Prochaines dates&nbsp;:</strong> annoncées ici et lors de votre inscription.
-         <!-- MODIFIEZ ICI : liste des prochaines dates --></p>
-
-      <h3 style="margin-top:36px; font-size:1.25rem;">S'inscrire à un atelier</h3>
-      <!-- Formulaire géré par Netlify Forms : aucune configuration serveur nécessaire.
-           Les inscriptions arrivent dans l'onglet "Forms" de votre tableau de bord Netlify,
-           avec notification e-mail si vous l'activez (Site settings → Forms → Notifications). -->
-      <form name="inscription-atelier" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="inscription-atelier">
-        <p style="display:none"><label>Ne pas remplir&nbsp;: <input name="bot-field"></label></p>
-        <div>
-          <label for="nom">Votre nom</label>
-          <input type="text" id="nom" name="nom" required autocomplete="name">
-        </div>
-        <div>
-          <label for="email">Votre e-mail</label>
-          <input type="email" id="email" name="email" required autocomplete="email">
-        </div>
-        <div>
-          <label for="date-atelier">Date souhaitée</label>
-          <!-- MODIFIEZ ICI : les dates proposées -->
-          <select id="date-atelier" name="date-atelier" required>
-            <option value="">Choisir une date…</option>
-            <option>Me tenir informé·e des prochaines dates</option>
-          </select>
-        </div>
-        <div>
-          <label for="message">Une question, une précision&nbsp;? (facultatif)</label>
-          <textarea id="message" name="message" rows="3"></textarea>
-        </div>
-        <button type="submit">Envoyer ma demande d'inscription</button>
-      </form>
+      <!-- MODIFIEZ ICI : remplacez par votre lien Resalib une fois votre agenda configuré -->
+      <a class="btn btn-primary" href="https://www.resalib.fr/praticien/VOTRE-LIEN" target="_blank" rel="noopener">Voir les prochaines dates et réserver</a>
     </div>
   </section>
 
-  <!-- ================= INTERVENTIONS STRUCTURES ================= -->
+  <section class="block block-light" id="cycles">
+    <div class="wrap">
+      <span class="eyebrow">Cinq cycles sur l'année</span>
+      <h2>Aller plus loin, en trois temps</h2>
+      <p class="lede">Chaque cycle se déroule sur environ deux mois, en trois séances espacées de
+         2 à 3 semaines&nbsp;: comprendre, pratiquer, puis intégrer. Chaque séance se réserve
+         indépendamment — vous choisissez de venir à une, deux ou aux trois.</p>
+
+      <div class="cycles">
+
+        <article class="cycle-card">
+          <span class="cycle-dot" style="background:#2a78d6"></span>
+          <div class="cycle-body">
+            <div class="cycle-period">Septembre – octobre</div>
+            <h3>Corps &amp; Intimité</h3>
+            <p>Un temps guidé pour se reconnecter à son corps&nbsp;: ancrage, conscience corporelle
+               et respiration, pour apprivoiser un rapport plus apaisé à soi-même. Atelier pédagogique
+               en groupe, sans partage personnel requis.</p>
+            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
+          </div>
+          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
+        </article>
+
+        <article class="cycle-card">
+          <span class="cycle-dot" style="background:#4a3aa7"></span>
+          <div class="cycle-body">
+            <div class="cycle-period">Novembre – décembre</div>
+            <h3>Pleine conscience et émotions</h3>
+            <p>Une initiation à la pleine conscience pour apprendre à observer ses émotions avec
+               plus de recul, sans jugement.</p>
+            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
+          </div>
+          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
+        </article>
+
+        <article class="cycle-card">
+          <span class="cycle-dot" style="background:#1baf7a"></span>
+          <div class="cycle-body">
+            <div class="cycle-period">Janvier – février</div>
+            <h3>Calme et sommeil</h3>
+            <p>Techniques de détente et de respiration pour apaiser le mental en fin de journée et
+               favoriser un endormissement plus serein.</p>
+            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
+          </div>
+          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
+        </article>
+
+        <article class="cycle-card">
+          <span class="cycle-dot" style="background:#eb6834"></span>
+          <div class="cycle-body">
+            <div class="cycle-period">Mars – avril</div>
+            <h3>Stress et vie professionnelle</h3>
+            <p>Des outils simples et concrets pour gérer les tensions du quotidien professionnel&nbsp;:
+               respiration, pauses actives, recentrage rapide.</p>
+            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
+          </div>
+          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
+        </article>
+
+        <article class="cycle-card">
+          <span class="cycle-dot" style="background:#e87ba4"></span>
+          <div class="cycle-body">
+            <div class="cycle-period">Mai – juin</div>
+            <h3>Vivre les transitions</h3>
+            <p>Un temps guidé pour traverser les moments qui bousculent&nbsp;: devenir parent, un deuil,
+               une rupture, un changement de vie. Ancrage, respiration et mise en mots, pour retrouver
+               un point d'appui.</p>
+            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
+          </div>
+          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
+        </article>
+
+      </div>
+
+      <p style="margin-top:22px; font-size:0.9rem; color:var(--ink-soft);">Juillet et août&nbsp;: pause estivale
+         des cycles thématiques — Respirer&nbsp;&amp;&nbsp;se poser continue selon les disponibilités.</p>
+
+      <p style="margin-top:28px;">
+        <!-- MODIFIEZ ICI : remplacez par votre lien Resalib -->
+        <a class="btn btn-primary" href="https://www.resalib.fr/praticien/VOTRE-LIEN" target="_blank" rel="noopener">Voir le calendrier et réserver une séance</a>
+      </p>
+      <p class="note-cadre">Le tarif à 40&nbsp;€ pour les 3 séances d'un cycle se règle directement
+         auprès de moi (espèces, chèque ou virement) — chaque séance reste réservable et payable
+         séparément à 15&nbsp;€ sur la plateforme de réservation.</p>
+    </div>
+  </section>
+
   <section class="block block-dark" id="structures">
     <div class="wrap">
       <span class="eyebrow">Structures &amp; collectifs</span>
       <h2>Ateliers et interventions sur mesure</h2>
-      <p style="color:var(--on-accent-soft);">Établissements scolaires, centres sociaux, associations,
-         entreprises et comités sociaux&nbsp;: j'interviens sur les thèmes de la vie relationnelle,
-         affective et de la gestion du stress, avec des formats adaptés à votre public.</p>
+      <p>Établissements scolaires, centres sociaux, associations, entreprises et comités sociaux&nbsp;:
+         j'interviens sur les thèmes de la vie relationnelle, affective et de la gestion du stress,
+         avec des formats adaptés à votre public.</p>
       <ul class="liste" style="border-color:rgba(245,241,230,0.22);">
         <li><strong>Communication dans le couple</strong> — atelier interactif, 2&nbsp;h, adultes</li>
         <li><strong>Gestion du stress et relaxation</strong> — atelier pratique, 1&nbsp;h à 2&nbsp;h, tout public</li>
@@ -219,14 +233,13 @@
             équipes (infirmière scolaire, CPE), dans le cadre du programme éducatif de l'établissement</li>
       </ul>
       <div class="infos-cle">
-        <!-- MODIFIEZ ICI : tarif interventions -->
-        <span style="background:transparent; border-color:rgba(245,241,230,0.4); color:var(--on-accent);">À partir de 150&nbsp;€ l'intervention</span>
-        <span style="background:transparent; border-color:rgba(245,241,230,0.4); color:var(--on-accent);">Devis sous 48&nbsp;h</span>
+        <span>À partir de 150&nbsp;€ l'intervention</span>
+        <span>Devis sous 48&nbsp;h</span>
       </div>
       <p style="color:var(--on-accent-soft); font-size:0.95rem;">Psychologie (licence), praticien
          certifié en sexothérapie et thérapie de couple, cinq années d'expérience en établissement
          scolaire.</p>
-      <p style="margin-top:22px;"><a class="btn btn-primary" style="background:var(--bg); color:var(--accent);" href="mailto:payet.julien.msh@gmail.com?subject=Demande%20de%20devis%20—%20intervention">Demander un devis</a></p>
+      <p style="margin-top:22px;"><a class="btn btn-primary" href="mailto:payet.julien.msh@gmail.com?subject=Demande%20de%20devis%20—%20intervention">Demander un devis</a></p>
     </div>
   </section>
 
@@ -254,7 +267,7 @@
     </div>
     <div>
       <h4>Navigation</h4>
-      <p><a href="accompagnements.html">Accompagnements</a></p>
+      <p><a href="index.html#parcours">Séances</a></p>
       <p><a href="ateliers.html">Ateliers</a></p>
       <p><a href="pro.html">Professionnels de santé</a></p>
     </div>
