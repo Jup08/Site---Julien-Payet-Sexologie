@@ -87,3 +87,47 @@ collections:
           - { label: "Encart contact — texte", name: "cta_text", widget: "string" }
           - { label: "Téléphone", name: "phone", widget: "string" }
           - { label: "Email", name: "email", widget: "string" }
+
+  - name: "apparence"
+    label: "Apparence du site"
+    files:
+      - file: "content/theme.json"
+        label: "Couleurs et polices"
+        name: "theme"
+        fields:
+          - { label: "Couleur de fond principale", name: "bg", widget: "color" }
+          - { label: "Couleur de fond alternative (bandeaux)", name: "bg_alt", widget: "color" }
+          - { label: "Couleur du texte", name: "ink", widget: "color" }
+          - { label: "Couleur du texte adouci", name: "ink_soft", widget: "color" }
+          - { label: "Couleur d'accent (boutons, titres foncés)", name: "accent", widget: "color" }
+          - { label: "Couleur d'accent — variante claire (survol)", name: "accent_soft", widget: "color" }
+          - label: "Police des titres"
+            name: "font_titre"
+            widget: "select"
+            options: ["Newsreader", "Fraunces", "Playfair Display", "Lora", "Cormorant Garamond"]
+          - label: "Police du texte courant"
+            name: "font_texte"
+            widget: "select"
+            options: ["Public Sans", "Inter", "Work Sans", "Karla", "Source Sans 3"]
+
+  - name: "ateliers"
+    label: "Page Ateliers"
+    files:
+      - file: "content/ateliers.json"
+        label: "Contenu de la page Ateliers"
+        name: "ateliers"
+        fields:
+          - { label: "Bandeau (au-dessus du titre)", name: "ate_eyebrow", widget: "string" }
+          - { label: "Titre principal", name: "ate_title", widget: "string" }
+          - { label: "Texte d'introduction", name: "ate_lede", widget: "text" }
+          - { label: "Tarif affiché (bandeau infos)", name: "ate_tarif", widget: "string" }
+          - { label: "Carte Hommes — badge (fréquence)", name: "hommes_badge", widget: "string" }
+          - { label: "Carte Hommes — titre de l'atelier", name: "hommes_title", widget: "string" }
+          - { label: "Carte Hommes — description", name: "hommes_text", widget: "text" }
+          - { label: "Carte Femmes — badge (fréquence)", name: "femmes_badge", widget: "string" }
+          - { label: "Carte Femmes — titre de l'atelier", name: "femmes_title", widget: "string" }
+          - { label: "Carte Femmes — description", name: "femmes_text", widget: "text" }
+          - { label: "Carte Ouverts — badge", name: "ouverts_badge", widget: "string" }
+          - { label: "Carte Ouverts — titre", name: "ouverts_title", widget: "string" }
+          - { label: "Carte Ouverts — description", name: "ouverts_text", widget: "text" }
+          - { label: "Note bien-être (bas de page)", name: "ate_note", widget: "text" }

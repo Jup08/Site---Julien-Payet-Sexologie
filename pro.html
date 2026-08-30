@@ -14,18 +14,19 @@
     --accent:#2C3C33; --accent-soft:#3F5349; --on-accent:#F5F1E6; --on-accent-soft:#C7D3C3;
     --line:#E1D8C5; --line-alt:#D7C797;
     --maxw:1120px;
+    --font-titre:'Newsreader', serif; --font-texte:'Public Sans', sans-serif;
   }
   *{box-sizing:border-box;}
   @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;}}
-  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', sans-serif; line-height:1.6;}
-  h1,h2,h3{font-family:'Newsreader', serif; font-weight:500; color:inherit; margin:0;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-texte); line-height:1.6;}
+  h1,h2,h3{font-family:var(--font-titre); font-weight:500; color:inherit; margin:0;}
   a{color:var(--accent);}
   :focus-visible{outline:3px solid var(--accent); outline-offset:3px;}
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 28px;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(24px, 6vw, 72px);}
   .eyebrow{font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600;}
   header{position:sticky; top:0; z-index:50; background:rgba(250,246,239,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--line);}
-  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px 28px; max-width:var(--maxw); margin:0 auto;}
-  .logo{font-family:'Newsreader', serif; font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px clamp(24px, 6vw, 72px); max-width:var(--maxw); margin:0 auto;}
+  .logo{font-family:var(--font-titre); font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
   .navphone{background:var(--accent); color:var(--bg); padding:9px 18px; border-radius:30px; text-decoration:none; font-weight:600; font-size:0.9rem;}
   .navlinks{display:flex; gap:26px; list-style:none; margin:0; padding:0;}
   .navlinks a{text-decoration:none; color:var(--ink); font-size:0.95rem; font-weight:500;}
@@ -142,7 +143,10 @@
 </footer>
 
 <script src="assets/cms.js"></script>
-<script>applyContent('content/pro.json');</script>
+<script>
+  applyContent('content/pro.json');
+  applyTheme('content/theme.json');
+</script>
 
 </body>
 </html>

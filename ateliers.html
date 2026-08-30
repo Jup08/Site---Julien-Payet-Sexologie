@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ateliers relaxation &amp; interventions — Albi | Julien Payet</title>
-<meta name="description" content="Ateliers de relaxation et méditation guidée à Albi : atelier libre Respirer & se poser, et cinq cycles thématiques en 3 séances. Réservation en ligne.">
+<meta name="description" content="Ateliers de relaxation à Albi : ateliers réservés aux hommes, aux femmes, et ateliers ouverts à tous. Réservation en ligne.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,72,400;0,72,500;1,72,400;0,144,600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,12 +13,13 @@
     --bg:#FAF6EF; --bg-alt:#E8D9B4; --ink:#3A2E22; --ink-soft:#7A6F5F;
     --accent:#2C3C33; --accent-soft:#3F5349; --on-accent:#F5F1E6; --on-accent-soft:#C7D3C3;
     --line:#E1D8C5; --line-alt:#D7C797; --maxw:1120px;
+    --font-titre:'Newsreader', serif; --font-texte:'Public Sans', sans-serif;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} *{animation:none !important; transition:none !important;} }
-  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased;}
-  h1,h2,h3{font-family:'Newsreader', serif; font-weight:500; color:inherit; margin:0;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--font-texte); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:var(--font-titre); font-weight:500; color:inherit; margin:0;}
   a{color:var(--accent);}
   :focus-visible{outline:3px solid var(--accent); outline-offset:3px; border-radius:2px;}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 clamp(24px, 6vw, 72px);}
@@ -26,7 +27,7 @@
 
   header{position:sticky; top:0; z-index:50; background:rgba(250,246,239,0.92); backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid var(--line);}
   .nav{display:flex; align-items:center; justify-content:space-between; padding:18px clamp(24px, 6vw, 72px); max-width:var(--maxw); margin:0 auto;}
-  .logo{font-family:'Newsreader', serif; font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
+  .logo{font-family:var(--font-titre); font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
   .navlinks{display:flex; gap:30px; list-style:none; margin:0; padding:0; align-items:center;}
   .navlinks a{text-decoration:none; font-size:0.95rem; color:var(--ink); font-weight:500;}
   .navlinks a:hover{color:var(--accent);}
@@ -65,25 +66,33 @@
   .liste li:last-child{border-bottom:none;}
   .liste li::before{content:"—"; position:absolute; left:0; color:var(--accent);}
 
-  .cycles{display:flex; flex-direction:column; gap:18px; margin-top:8px;}
-  .cycle-card{background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:26px 28px; display:flex; gap:24px; flex-wrap:wrap; align-items:flex-start;}
-  .cycle-dot{width:12px; height:12px; border-radius:3px; margin-top:8px; flex-shrink:0;}
-  .cycle-body{flex:1; min-width:240px;}
-  .cycle-period{font-size:0.8rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px;}
-  .cycle-body h3{font-size:1.3rem; margin-bottom:8px;}
-  .cycle-body p{margin:0 0 14px; font-size:0.96rem; max-width:560px;}
-  .cycle-steps{display:flex; gap:10px; flex-wrap:wrap;}
-  .cycle-steps span{font-size:0.82rem; font-weight:600; background:var(--bg-alt); border-radius:20px; padding:5px 14px; color:var(--ink);}
-  .cycle-price{white-space:nowrap; text-align:right; padding-top:4px;}
-  .cycle-price .montant{font-family:'Newsreader', serif; font-size:1.5rem; color:var(--accent); display:block;}
-  .cycle-price .detail{font-size:0.8rem; color:var(--ink-soft);}
+  .cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:26px; margin-top:8px;}
+  @media (max-width:780px){.cards{grid-template-columns:1fr;}}
+  .card{background:var(--bg); border:1px solid var(--line); border-radius:14px; padding:30px 28px;}
+  .card .dur{font-size:0.82rem; color:var(--ink-soft); font-weight:600; letter-spacing:0.04em; text-transform:uppercase;}
+  .card h3{font-size:1.25rem; margin:6px 0 14px;}
+  .card p{color:var(--ink); margin:0;}
 
   .note-cadre{font-size:0.88rem; color:var(--ink-soft); border-left:3px solid var(--accent); padding-left:16px; max-width:680px; margin-top:10px;}
+
+  /* Widget de réservation en direct */
+  .creneaux-liste{max-width:680px; margin-top:8px;}
+  .creneaux-msg{color:var(--ink-soft); font-size:0.95rem;}
+  .creneau-item{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:18px 22px; margin-bottom:14px;}
+  .creneau-info{display:flex; flex-direction:column; gap:4px; margin-bottom:12px;}
+  .creneau-info strong{font-size:1.05rem;}
+  .creneau-info span{font-size:0.88rem; color:var(--ink-soft);}
+  .creneau-form{display:grid; gap:12px; margin-top:14px; padding-top:14px; border-top:1px solid var(--line-alt); max-width:360px;}
+  .creneau-form label{font-size:0.88rem; font-weight:600; display:grid; gap:4px;}
+  .creneau-form input{padding:10px 12px; border:1px solid var(--line-alt); border-radius:8px; font-family:var(--font-texte); font-size:0.95rem; background:var(--bg);}
+  .creneau-form input:focus{outline:3px solid var(--accent); outline-offset:1px;}
+  .creneau-form-msg{font-size:0.9rem; margin:0; min-height:1.2em;}
+  .btn-reserver{font-size:0.9rem; padding:10px 20px;}
 
   footer{background:var(--bg); border-top:1px solid var(--line); padding:56px 0 36px;}
   .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:36px;}
   @media (max-width:780px){.foot-grid{grid-template-columns:1fr; gap:28px;}}
-  footer h4{font-family:'Newsreader',serif; color:var(--ink); font-size:1.1rem; margin:0 0 12px;}
+  footer h4{font-family:var(--font-titre); color:var(--ink); font-size:1.1rem; margin:0 0 12px;}
   footer p, footer a{color:var(--ink-soft); font-size:0.92rem; text-decoration:none;}
   footer a:hover{color:var(--accent);}
   .copyright{margin-top:44px; font-size:0.8rem; color:var(--ink-soft);}
@@ -108,116 +117,150 @@
 <main>
 
   <section class="wrap pagehead">
-    <span class="eyebrow">Ateliers — Albi</span>
-    <h1>Souffler, comprendre, se reconnecter</h1>
-    <p class="lede">Un atelier d'entrée libre pour souffler quand vous en avez besoin, et cinq cycles
-       thématiques de trois séances pour aller plus loin sur un sujet précis — à votre rythme,
-       sans engagement au-delà de la séance réservée.</p>
+    <span class="eyebrow" data-text="ate_eyebrow">Ateliers — Albi</span>
+    <h1 data-text="ate_title">Souffler, comprendre, se reconnecter</h1>
+    <p class="lede" data-text="ate_lede">Des ateliers simples, en petit groupe, autour de la relaxation et du bien-être&nbsp;:
+       des espaces réservés aux hommes, d'autres réservés aux femmes, et des ateliers ouverts à
+       toutes et tous. Chaque séance est indépendante — pas d'engagement sur plusieurs semaines.</p>
   </section>
 
-  <section class="block block-sand" id="respirer">
+  <section class="block block-sand">
     <div class="wrap">
-      <span class="eyebrow">Entrée libre — sans cycle</span>
-      <h2>Respirer &amp; se poser</h2>
-      <p class="lede">Respiration guidée, détente musculaire progressive et retour au calme. Aucune
-         expérience nécessaire : c'est la porte d'entrée, ouverte à tout moment, sans engagement.</p>
       <div class="infos-cle">
         <span>1&nbsp;h</span>
         <span>4&nbsp;personnes max.</span>
-        <span>15&nbsp;€ la séance</span>
-        <span>Carte 5&nbsp;séances&nbsp;: 60&nbsp;€</span>
+        <span data-text="ate_tarif">10 à 15&nbsp;€ la séance</span>
       </div>
-      <!-- MODIFIEZ ICI : remplacez par votre lien Resalib une fois votre agenda configuré -->
-      <a class="btn btn-primary" href="https://www.resalib.fr/praticien/VOTRE-LIEN" target="_blank" rel="noopener">Voir les prochaines dates et réserver</a>
+      <p style="max-width:640px; margin-top:6px;">Les prochaines dates de chaque atelier sont
+         publiées juste en dessous — réservez directement depuis cette page, sans redirection.</p>
     </div>
   </section>
 
-  <section class="block block-light" id="cycles">
+  <section class="block block-light" id="ateliers-categories">
     <div class="wrap">
-      <span class="eyebrow">Cinq cycles sur l'année</span>
-      <h2>Aller plus loin, en trois temps</h2>
-      <p class="lede">Chaque cycle se déroule sur environ deux mois, en trois séances espacées de
-         2 à 3 semaines&nbsp;: comprendre, pratiquer, puis intégrer. Chaque séance se réserve
-         indépendamment — vous choisissez de venir à une, deux ou aux trois.</p>
+      <span class="eyebrow">Trois espaces</span>
+      <h2>Choisir son atelier</h2>
+      <div class="cards">
 
-      <div class="cycles">
+        <div class="card">
+          <span class="dur" data-text="hommes_badge">Hommes — 2 séances / semaine</span>
+          <h3 data-text="hommes_title">Sortir de la pression de performance</h3>
+          <p data-text="hommes_text">Comprendre d'où vient l'injonction à "assurer", et explorer d'autres façons de vivre
+             sa sexualité, plus libres et moins anxieuses. Un espace entre hommes, où la parole
+             circule plus librement entre pairs.</p>
+        </div>
 
-        <article class="cycle-card">
-          <span class="cycle-dot" style="background:#2a78d6"></span>
-          <div class="cycle-body">
-            <div class="cycle-period">Septembre – octobre</div>
-            <h3>Corps &amp; Intimité</h3>
-            <p>Un temps guidé pour se reconnecter à son corps&nbsp;: ancrage, conscience corporelle
-               et respiration, pour apprivoiser un rapport plus apaisé à soi-même. Atelier pédagogique
-               en groupe, sans partage personnel requis.</p>
-            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
-          </div>
-          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
-        </article>
+        <div class="card">
+          <span class="dur" data-text="femmes_badge">Femmes — 2 séances / semaine</span>
+          <h3 data-text="femmes_title">Désir au féminin</h3>
+          <p data-text="femmes_text">Interroger ce qu'on nous a appris du désir féminin, et ce qu'on en vit vraiment — pour
+             se réconcilier avec ses propres rythmes. Un espace entre femmes, pensé pour elles.</p>
+        </div>
 
-        <article class="cycle-card">
-          <span class="cycle-dot" style="background:#4a3aa7"></span>
-          <div class="cycle-body">
-            <div class="cycle-period">Novembre – décembre</div>
-            <h3>Pleine conscience et émotions</h3>
-            <p>Une initiation à la pleine conscience pour apprendre à observer ses émotions avec
-               plus de recul, sans jugement.</p>
-            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
-          </div>
-          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
-        </article>
-
-        <article class="cycle-card">
-          <span class="cycle-dot" style="background:#1baf7a"></span>
-          <div class="cycle-body">
-            <div class="cycle-period">Janvier – février</div>
-            <h3>Calme et sommeil</h3>
-            <p>Techniques de détente et de respiration pour apaiser le mental en fin de journée et
-               favoriser un endormissement plus serein.</p>
-            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
-          </div>
-          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
-        </article>
-
-        <article class="cycle-card">
-          <span class="cycle-dot" style="background:#eb6834"></span>
-          <div class="cycle-body">
-            <div class="cycle-period">Mars – avril</div>
-            <h3>Stress et vie professionnelle</h3>
-            <p>Des outils simples et concrets pour gérer les tensions du quotidien professionnel&nbsp;:
-               respiration, pauses actives, recentrage rapide.</p>
-            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
-          </div>
-          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
-        </article>
-
-        <article class="cycle-card">
-          <span class="cycle-dot" style="background:#e87ba4"></span>
-          <div class="cycle-body">
-            <div class="cycle-period">Mai – juin</div>
-            <h3>Vivre les transitions</h3>
-            <p>Un temps guidé pour traverser les moments qui bousculent&nbsp;: devenir parent, un deuil,
-               une rupture, un changement de vie. Ancrage, respiration et mise en mots, pour retrouver
-               un point d'appui.</p>
-            <div class="cycle-steps"><span>1. Comprendre</span><span>2. Pratiquer</span><span>3. Intégrer</span></div>
-          </div>
-          <div class="cycle-price"><span class="montant">15&nbsp;€</span><span class="detail">ou 40&nbsp;€ les 3</span></div>
-        </article>
+        <div class="card">
+          <span class="dur" data-text="ouverts_badge">Mixte — réservation libre</span>
+          <h3 data-text="ouverts_title">Ateliers ouverts à tous</h3>
+          <p data-text="ouverts_text">Respirer & se poser — respiration guidée et retour au calme, la porte d'entrée en
+             douceur. Corps & Intimité — ancrage et conscience corporelle, pour apprivoiser un
+             rapport plus apaisé à soi-même. Deux ateliers ouverts à toutes et tous, sans condition.</p>
+        </div>
 
       </div>
 
-      <p style="margin-top:22px; font-size:0.9rem; color:var(--ink-soft);">Juillet et août&nbsp;: pause estivale
-         des cycles thématiques — Respirer&nbsp;&amp;&nbsp;se poser continue selon les disponibilités.</p>
-
-      <p style="margin-top:28px;">
-        <!-- MODIFIEZ ICI : remplacez par votre lien Resalib -->
-        <a class="btn btn-primary" href="https://www.resalib.fr/praticien/VOTRE-LIEN" target="_blank" rel="noopener">Voir le calendrier et réserver une séance</a>
-      </p>
-      <p class="note-cadre">Le tarif à 40&nbsp;€ pour les 3 séances d'un cycle se règle directement
-         auprès de moi (espèces, chèque ou virement) — chaque séance reste réservable et payable
-         séparément à 15&nbsp;€ sur la plateforme de réservation.</p>
     </div>
   </section>
+
+  <!-- ================= RÉSERVATION EN DIRECT ================= -->
+  <section class="block block-sand" id="reserver">
+    <div class="wrap">
+      <span class="eyebrow">Réservation</span>
+      <h2>Prochains créneaux disponibles</h2>
+      <div id="creneaux-liste" class="creneaux-liste">
+        <p class="creneaux-msg">Chargement des disponibilités…</p>
+      </div>
+      <p class="note-cadre" style="margin-top:24px;">Le paiement (10 à 15&nbsp;€ selon l'atelier) se
+         règle sur place, en espèces ou par chèque.</p>
+    </div>
+  </section>
+
+  <script>
+  // MODIFIEZ ICI : collez l'URL de votre application web Google Apps Script
+  const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
+
+  const listeEl = document.getElementById('creneaux-liste');
+
+  function chargerCreneaux() {
+    listeEl.innerHTML = '<p class="creneaux-msg">Chargement des disponibilités…</p>';
+    fetch(URL_AGENDA)
+      .then(r => r.json())
+      .then(creneaux => {
+        if (!creneaux.length) {
+          listeEl.innerHTML = '<p class="creneaux-msg">Aucun créneau ouvert pour le moment — revenez bientôt, ou appelez directement au 06 62 64 88 90.</p>';
+          return;
+        }
+        listeEl.innerHTML = '';
+        creneaux.forEach(c => listeEl.appendChild(creerLigneCreneau(c)));
+      })
+      .catch(() => {
+        listeEl.innerHTML = '<p class="creneaux-msg">Impossible de charger les disponibilités pour le moment. Vous pouvez réserver par téléphone au 06 62 64 88 90.</p>';
+      });
+  }
+
+  function creerLigneCreneau(c) {
+    const ligne = document.createElement('div');
+    ligne.className = 'creneau-item';
+    ligne.innerHTML = `
+      <div class="creneau-info">
+        <strong>${c.atelier}</strong>
+        <span>${c.date} à ${c.heure} — ${c.placesRestantes} place${c.placesRestantes > 1 ? 's' : ''} restante${c.placesRestantes > 1 ? 's' : ''}</span>
+      </div>
+      <button class="btn btn-primary btn-reserver" type="button">Réserver</button>
+    `;
+    ligne.querySelector('.btn-reserver').addEventListener('click', () => ouvrirFormulaire(ligne, c));
+    return ligne;
+  }
+
+  function ouvrirFormulaire(ligne, c) {
+    if (ligne.querySelector('.creneau-form')) return; // déjà ouvert
+    const form = document.createElement('form');
+    form.className = 'creneau-form';
+    form.innerHTML = `
+      <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
+      <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
+      <label>Email<input type="email" name="email" required autocomplete="email"></label>
+      <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
+      <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
+      <p class="creneau-form-msg"></p>
+    `;
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const msgEl = form.querySelector('.creneau-form-msg');
+      msgEl.textContent = "Envoi en cours…";
+      const data = {
+        slotId: c.id,
+        nom: form.nom.value,
+        email: form.email.value,
+        telephone: form.telephone.value,
+        siteWeb: form.siteWeb.value
+      };
+      fetch(URL_AGENDA, { method: 'POST', body: JSON.stringify(data) })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            msgEl.textContent = "✅ Réservation confirmée — un email de confirmation vous a été envoyé.";
+            form.querySelector('button[type=submit]').disabled = true;
+            setTimeout(chargerCreneaux, 2000);
+          } else {
+            msgEl.textContent = "⚠️ " + (res.message || "Une erreur est survenue.");
+          }
+        })
+        .catch(() => { msgEl.textContent = "⚠️ Erreur de connexion, réessayez."; });
+    });
+    ligne.appendChild(form);
+  }
+
+  chargerCreneaux();
+  </script>
 
   <section class="block block-dark" id="structures">
     <div class="wrap">
@@ -245,7 +288,7 @@
 
   <section class="block block-light" style="padding:56px 0;">
     <div class="wrap">
-      <p class="note-cadre">Les ateliers de relaxation et de méditation guidée relèvent du bien-être
+      <p class="note-cadre" data-text="ate_note">Les ateliers de relaxation et de méditation guidée relèvent du bien-être
          et de la gestion du stress. Ils ne constituent pas un acte médical ni une psychothérapie,
          et ne se substituent pas à un suivi médical. Si votre situation le demande, je vous
          orienterai vers un professionnel de santé adapté.</p>
@@ -274,6 +317,12 @@
   </div>
   <div class="wrap copyright">© 2026 Julien Payet Sexologie</div>
 </footer>
+
+<script src="assets/cms.js"></script>
+<script>
+  applyContent('content/ateliers.json');
+  applyTheme('content/theme.json');
+</script>
 
 </body>
 </html>

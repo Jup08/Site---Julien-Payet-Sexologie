@@ -57,3 +57,62 @@ async function applyContent(jsonPath) {
     console.warn('Contenu dynamique non chargé :', e);
   }
 }
+
+/* ============================================================
+   APPARENCE (couleurs & polices) — piloté depuis Decap CMS,
+   fichier content/theme.json. N'affecte rien si le fichier est
+   absent : les valeurs par défaut du CSS restent actives.
+   ============================================================ */
+
+const POLICES_GOOGLE = {
+  titre: {
+    "Newsreader": "family=Newsreader:ital,opsz,wght@0,72,400;0,72,500;1,72,400;0,144,600",
+    "Fraunces": "family=Fraunces:wght@400;500;600",
+    "Playfair Display": "family=Playfair+Display:wght@400;500;600;700",
+    "Lora": "family=Lora:ital,wght@0,400;0,500;0,600;1,400",
+    "Cormorant Garamond": "family=Cormorant+Garamond:wght@400;500;600;700"
+  },
+  texte: {
+    "Public Sans": "family=Public+Sans:wght@400;500;600;700",
+    "Inter": "family=Inter:wght@400;500;600;700",
+    "Work Sans": "family=Work+Sans:wght@400;500;600;700",
+    "Karla": "family=Karla:wght@400;500;600;700",
+    "Source Sans 3": "family=Source+Sans+3:wght@400;500;600;700"
+  }
+};
+
+function chargerPoliceGoogle(parametre) {
+  const href = 'https://fonts.googleapis.com/css2?' + parametre + '&display=swap';
+  if (document.querySelector('link[href="' + href + '"]')) return;
+  const lien = document.createElement('link');
+  lien.rel = 'stylesheet';
+  lien.href = href;
+  document.head.appendChild(lien);
+}
+
+async function applyTheme(jsonPath) {
+  try {
+    const res = await fetch(jsonPath, { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    const racine = document.documentElement.style;
+
+    if (data.bg) racine.setProperty('--bg', data.bg);
+    if (data.bg_alt) racine.setProperty('--bg-alt', data.bg_alt);
+    if (data.ink) racine.setProperty('--ink', data.ink);
+    if (data.ink_soft) racine.setProperty('--ink-soft', data.ink_soft);
+    if (data.accent) racine.setProperty('--accent', data.accent);
+    if (data.accent_soft) racine.setProperty('--accent-soft', data.accent_soft);
+
+    if (data.font_titre && POLICES_GOOGLE.titre[data.font_titre]) {
+      chargerPoliceGoogle(POLICES_GOOGLE.titre[data.font_titre]);
+      racine.setProperty('--font-titre', "'" + data.font_titre + "', serif");
+    }
+    if (data.font_texte && POLICES_GOOGLE.texte[data.font_texte]) {
+      chargerPoliceGoogle(POLICES_GOOGLE.texte[data.font_texte]);
+      racine.setProperty('--font-texte', "'" + data.font_texte + "', sans-serif");
+    }
+  } catch (e) {
+    console.warn('Apparence non chargée :', e);
+  }
+}
