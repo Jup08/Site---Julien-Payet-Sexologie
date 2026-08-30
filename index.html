@@ -147,6 +147,32 @@
   .procall-box h3{font-size:1.15rem; margin-bottom:6px;}
   .procall-box p{margin:0; color:var(--ink); font-size:0.95rem; max-width:440px;}
 
+  /* ---------- Réservation en ligne (calendrier individuel) ---------- */
+  .type-selecteur{display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 28px;}
+  .type-btn{
+    background:var(--bg); border:1.5px solid var(--line-alt); border-radius:30px;
+    padding:11px 20px; font-family:'Public Sans', sans-serif; font-weight:600; font-size:0.92rem;
+    color:var(--ink); cursor:pointer; transition:background .15s ease, border-color .15s ease;
+  }
+  .type-btn:hover{border-color:var(--accent);}
+  .type-btn.actif{background:var(--accent); color:var(--bg); border-color:var(--accent);}
+  .dispo-liste{max-width:720px;}
+  .creneaux-msg{color:var(--ink-soft); font-size:0.95rem;}
+  .dispo-jour{margin-bottom:16px;}
+  .dispo-jour-date{font-weight:700; font-size:0.92rem; margin-bottom:8px; color:var(--ink);}
+  .dispo-jour-heures{display:flex; flex-wrap:wrap; gap:8px;}
+  .btn-heure{
+    background:var(--bg); border:1px solid var(--line-alt); border-radius:8px;
+    padding:8px 14px; font-family:'Public Sans', sans-serif; font-size:0.9rem;
+    color:var(--ink); cursor:pointer; transition:background .15s ease, color .15s ease;
+  }
+  .btn-heure:hover{background:var(--accent); color:var(--bg); border-color:var(--accent);}
+  .creneau-form{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:20px; margin-bottom:20px; display:grid; gap:12px; max-width:360px;}
+  .creneau-form label{font-size:0.88rem; font-weight:600; display:grid; gap:4px;}
+  .creneau-form input{padding:10px 12px; border:1px solid var(--line-alt); border-radius:8px; font-family:'Public Sans', sans-serif; font-size:0.95rem; background:var(--bg);}
+  .creneau-form input:focus{outline:3px solid var(--accent); outline-offset:1px;}
+  .creneau-form-msg{font-size:0.9rem; margin:0; min-height:1.2em;}
+
   footer{background:var(--bg); border-top:1px solid var(--line); padding:56px 0 36px;}
   .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:36px;}
   @media (max-width:780px){.foot-grid{grid-template-columns:1fr; gap:28px;}}
@@ -248,23 +274,173 @@
           <span class="dur">Séance individuelle · 1h</span>
           <h3 data-text="individuel_title">En solo</h3>
           <p data-text="individuel_text">Pour les questions, blocages ou douleurs qui vous concernent personnellement, indépendamment de votre situation relationnelle actuelle.</p>
-          <a data-tel="phone" href="tel:0662648890">Prendre rendez-vous →</a>
+          <a href="#reserver-en-ligne" class="lien-reserver" data-select-type="individuelle">Réserver en ligne →</a>
         </div>
         <div class="card" id="couple">
           <span class="dur">Séance de couple · 1h</span>
           <h3 data-text="couple_title">En couple</h3>
           <p data-text="couple_text">Pour ce qui se joue à deux : désaccords de désir, silences installés, retentissement d'un événement de vie sur l'intimité partagée.</p>
-          <a data-tel="phone" href="tel:0662648890">Prendre rendez-vous →</a>
+          <a href="#reserver-en-ligne" class="lien-reserver" data-select-type="couple">Réserver en ligne →</a>
         </div>
         <div class="card" id="approfondissement">
           <span class="dur">Séance d'approfondissement · 2h</span>
           <h3 data-text="approfondissement_title">Aller plus loin</h3>
           <p data-text="approfondissement_text">Pour les moments où une heure ne suffit pas : un travail guidé en visualisation, avec le temps nécessaire pour aller chercher ce qui doit être exploré en profondeur, puis pour revenir et intégrer.</p>
-          <a data-tel="phone" href="tel:0662648890">Prendre rendez-vous →</a>
+          <a href="#reserver-en-ligne" class="lien-reserver" data-select-type="approfondissement">Réserver en ligne →</a>
         </div>
+      </div>
+      <p style="margin-top:18px; font-size:0.92rem; color:var(--ink-soft);">Vous préférez appeler&nbsp;? <a data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a></p>
+    </div>
+  </section>
+
+  <!-- ================= RÉSERVATION EN LIGNE — CALENDRIER ================= -->
+  <section class="block block-sand" id="reserver-en-ligne">
+    <div class="wrap">
+      <span class="eyebrow">Réservation en ligne</span>
+      <h2>Choisir un créneau</h2>
+      <div class="type-selecteur">
+        <button type="button" class="type-btn" data-type="individuelle" data-duree="60">Séance individuelle — 60&nbsp;€</button>
+        <button type="button" class="type-btn" data-type="couple" data-duree="60">Séance de couple — 80&nbsp;€</button>
+        <button type="button" class="type-btn" data-type="approfondissement" data-duree="120">Approfondissement — 120&nbsp;€</button>
+      </div>
+      <div id="dispo-liste" class="dispo-liste">
+        <p class="creneaux-msg">Choisissez d'abord un type de séance ci-dessus.</p>
       </div>
     </div>
   </section>
+
+  <script>
+  // MODIFIEZ ICI : la MÊME URL d'application web que celle utilisée dans ateliers.html
+  const URL_AGENDA = "https://script.google.com/macros/s/AKfycbyypt_UPKUibOtCuRHa9I4uoKv1-amtOoEPEKCKyU6qKE-BrX1I4wvNnjoMCGv59my0UQ/exec";
+
+  let dispoParJourCache = null;
+  let dureeChoisie = null;
+  let typeChoisi = null;
+
+  const dispoListeEl = document.getElementById('dispo-liste');
+  const boutonsType = document.querySelectorAll('.type-btn');
+
+  function versMinutes(hhmm) {
+    const [h, m] = hhmm.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  function calculerCreneauxValides(dispoParJour, dureeMinutes) {
+    const blocsNecessaires = dureeMinutes / 30;
+    const resultat = {};
+    Object.keys(dispoParJour).forEach(date => {
+      const heures = dispoParJour[date].slice().sort();
+      const minutesSet = new Set(heures.map(versMinutes));
+      const valides = heures.filter(h => {
+        const debut = versMinutes(h);
+        for (let j = 0; j < blocsNecessaires; j++) {
+          if (!minutesSet.has(debut + j * 30)) return false;
+        }
+        return true;
+      });
+      if (valides.length) resultat[date] = valides;
+    });
+    return resultat;
+  }
+
+  function afficherCreneaux() {
+    if (!typeChoisi) return;
+    dispoListeEl.innerHTML = '<p class="creneaux-msg">Chargement des disponibilités…</p>';
+
+    const chargement = dispoParJourCache
+      ? Promise.resolve(dispoParJourCache)
+      : fetch(URL_AGENDA + '?mode=individuel').then(r => r.json()).then(d => { dispoParJourCache = d; return d; });
+
+    chargement.then(dispo => {
+      const valides = calculerCreneauxValides(dispo, dureeChoisie);
+      const dates = Object.keys(valides).sort((a, b) => {
+        const [ja, ma, aa] = a.split('/').map(Number);
+        const [jb, mb, ab] = b.split('/').map(Number);
+        return new Date(aa, ma - 1, ja) - new Date(ab, mb - 1, jb);
+      });
+
+      if (!dates.length) {
+        dispoListeEl.innerHTML = '<p class="creneaux-msg">Aucun créneau disponible pour ce type de séance actuellement — appelez directement au 06 62 64 88 90.</p>';
+        return;
+      }
+
+      dispoListeEl.innerHTML = '';
+      dates.forEach(date => {
+        const bloc = document.createElement('div');
+        bloc.className = 'dispo-jour';
+        const heuresHtml = valides[date].map(h =>
+          `<button type="button" class="btn-heure" data-date="${date}" data-heure="${h}">${h}</button>`
+        ).join('');
+        bloc.innerHTML = `<div class="dispo-jour-date">${date}</div><div class="dispo-jour-heures">${heuresHtml}</div>`;
+        dispoListeEl.appendChild(bloc);
+      });
+
+      dispoListeEl.querySelectorAll('.btn-heure').forEach(btn => {
+        btn.addEventListener('click', () => ouvrirFormulaireIndividuel(btn.dataset.date, btn.dataset.heure));
+      });
+    }).catch(() => {
+      dispoListeEl.innerHTML = '<p class="creneaux-msg">Impossible de charger les disponibilités. Vous pouvez réserver par téléphone au 06 62 64 88 90.</p>';
+    });
+  }
+
+  function ouvrirFormulaireIndividuel(date, heure) {
+    document.querySelectorAll('.creneau-form-indiv').forEach(f => f.remove());
+    const infoType = Array.from(boutonsType).find(b => b.dataset.type === typeChoisi);
+    const form = document.createElement('form');
+    form.className = 'creneau-form creneau-form-indiv';
+    form.innerHTML = `
+      <p style="font-weight:600; margin:0 0 6px;">${infoType.textContent} — ${date} à ${heure}</p>
+      <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
+      <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
+      <label>Email<input type="email" name="email" required autocomplete="email"></label>
+      <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
+      <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
+      <p class="creneau-form-msg"></p>
+    `;
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const msgEl = form.querySelector('.creneau-form-msg');
+      msgEl.textContent = "Envoi en cours…";
+      fetch(URL_AGENDA, {
+        method: 'POST',
+        body: JSON.stringify({
+          mode: 'individuel', type: typeChoisi, date, heure,
+          nom: form.nom.value, email: form.email.value,
+          telephone: form.telephone.value, siteWeb: form.siteWeb.value
+        })
+      }).then(r => r.json()).then(res => {
+        if (res.success) {
+          msgEl.textContent = "✅ Rendez-vous confirmé — un email de confirmation vous a été envoyé.";
+          form.querySelector('button[type=submit]').disabled = true;
+          dispoParJourCache = null;
+          setTimeout(afficherCreneaux, 2000);
+        } else {
+          msgEl.textContent = "⚠️ " + (res.message || "Une erreur est survenue.");
+        }
+      }).catch(() => { msgEl.textContent = "⚠️ Erreur de connexion, réessayez."; });
+    });
+    dispoListeEl.prepend(form);
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  boutonsType.forEach(btn => {
+    btn.addEventListener('click', () => {
+      boutonsType.forEach(b => b.classList.remove('actif'));
+      btn.classList.add('actif');
+      typeChoisi = btn.dataset.type;
+      dureeChoisie = Number(btn.dataset.duree);
+      afficherCreneaux();
+    });
+  });
+
+  document.querySelectorAll('.lien-reserver').forEach(lien => {
+    lien.addEventListener('click', () => {
+      const type = lien.dataset.selectType;
+      const btn = Array.from(boutonsType).find(b => b.dataset.type === type);
+      if (btn) btn.click();
+    });
+  });
+  </script>
 
   <section class="block block-sand">
     <div class="wrap">

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda — vue d'ensemble</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF6EF; --ink:#3A2E22; --ink-soft:#7A6F5F; --accent:#2C3C33; --line:#E1D8C5;
+    --c-indiv:#2a78d6; --c-couple:#4a3aa7; --c-atelier:#1baf7a; --c-blocage:#7A6F5F;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', sans-serif;}
+  h1{font-family:'Newsreader', serif; font-weight:600; font-size:1.5rem; margin:0 0 4px;}
+  .wrap{max-width:1200px; margin:0 auto; padding:28px 20px 60px;}
+
+  /* ---- Écran de connexion ---- */
+  #ecran-cle{max-width:360px; margin:15vh auto; text-align:center;}
+  #ecran-cle input{width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:8px; font-size:1rem; margin:16px 0;}
+  #ecran-cle button{background:var(--accent); color:#fff; border:none; border-radius:8px; padding:12px 24px; font-weight:600; cursor:pointer; font-size:1rem;}
+  #ecran-cle p.erreur{color:#B3452C; font-size:0.9rem;}
+
+  /* ---- En-tête / navigation semaine ---- */
+  .entete{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px;}
+  .nav-semaine{display:flex; gap:10px; align-items:center;}
+  .nav-semaine button{background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px 14px; cursor:pointer; font-size:0.95rem;}
+  .legende{display:flex; gap:16px; flex-wrap:wrap; font-size:0.85rem;}
+  .legende span{display:inline-flex; align-items:center; gap:6px;}
+  .legende i{width:12px; height:12px; border-radius:3px; display:inline-block;}
+
+  /* ---- Grille calendrier ---- */
+  .grille-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:10px;}
+  .grille{display:grid; grid-template-columns:64px repeat(7, 1fr); min-width:900px;}
+  .grille .entete-jour{
+    padding:10px 6px; text-align:center; font-weight:700; font-size:0.85rem;
+    border-bottom:1px solid var(--line); border-left:1px solid var(--line); background:#fff;
+    position:sticky; top:0;
+  }
+  .grille .entete-jour:first-child, .grille .case-heure{border-left:none;}
+  .grille .case-heure{
+    font-size:0.75rem; color:var(--ink-soft); text-align:right; padding:2px 8px 0 0;
+    border-top:1px solid var(--line); background:#fff;
+  }
+  .colonne-jour{
+    position:relative; border-left:1px solid var(--line); border-top:1px solid var(--line);
+    background:repeating-linear-gradient(to bottom, transparent, transparent 39px, var(--line) 40px);
+  }
+  .evenement{
+    position:absolute; left:2px; right:2px; border-radius:6px; padding:4px 6px;
+    font-size:0.72rem; line-height:1.25; color:#fff; overflow:hidden; cursor:default;
+  }
+  .evenement strong{display:block; font-size:0.74rem;}
+  .evenement.indiv{background:var(--c-indiv);}
+  .evenement.couple{background:var(--c-couple);}
+  .evenement.atelier{background:var(--c-atelier);}
+  .evenement.blocage{background:var(--c-blocage);}
+  .creneaux-msg{color:var(--ink-soft); padding:20px;}
+</style>
+</head>
+<body>
+
+<div id="ecran-cle">
+  <h1>Agenda — accès privé</h1>
+  <p>Entrez votre clé pour afficher le calendrier.</p>
+  <input type="password" id="champ-cle" placeholder="Votre clé secrète" autocomplete="off">
+  <br>
+  <button id="btn-connexion">Afficher l'agenda</button>
+  <p class="erreur" id="msg-erreur"></p>
+</div>
+
+<div class="wrap" id="vue-agenda" style="display:none;">
+  <div class="entete">
+    <div>
+      <h1>Vue d'ensemble</h1>
+      <div class="legende">
+        <span><i style="background:var(--c-indiv)"></i>Individuelle</span>
+        <span><i style="background:var(--c-couple)"></i>Couple</span>
+        <span><i style="background:var(--c-atelier)"></i>Atelier</span>
+        <span><i style="background:var(--c-blocage)"></i>Bloqué / autre</span>
+      </div>
+    </div>
+    <div class="nav-semaine">
+      <button id="btn-prec">← Semaine précédente</button>
+      <span id="label-semaine" style="font-weight:600;"></span>
+      <button id="btn-suiv">Semaine suivante →</button>
+    </div>
+  </div>
+  <div class="grille-scroll">
+    <div class="grille" id="grille"></div>
+  </div>
+</div>
+
+<script>
+// MODIFIEZ ICI : la MÊME URL d'application web que celle utilisée dans ateliers.html et index.html
+const URL_AGENDA = "https://script.google.com/macros/s/AKfycbyypt_UPKUibOtCuRHa9I4uoKv1-amtOoEPEKCKyU6qKE-BrX1I4wvNnjoMCGv59my0UQ/exec";
+
+const HEURE_DEBUT_GRILLE = 8;   // 8h du matin
+const HEURE_FIN_GRILLE = 21;    // 21h
+const JOURS_LABELS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+
+let cleAdmin = "";
+let debutSemaineCourante = null; // "JJ/MM/AAAA" du lundi affiché
+
+function lundiDeCetteSemaine() {
+  const d = new Date();
+  const jour = (d.getDay() + 6) % 7; // 0 = lundi
+  d.setDate(d.getDate() - jour);
+  return d;
+}
+function formatDateFr(d) {
+  return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+}
+function parseDateFr(s) {
+  const [j,m,a] = s.split('/').map(Number);
+  return new Date(a, m-1, j);
+}
+
+document.getElementById('btn-connexion').addEventListener('click', tenterConnexion);
+document.getElementById('champ-cle').addEventListener('keydown', (e) => { if (e.key === 'Enter') tenterConnexion(); });
+
+function tenterConnexion() {
+  cleAdmin = document.getElementById('champ-cle').value;
+  debutSemaineCourante = formatDateFr(lundiDeCetteSemaine());
+  chargerSemaine();
+}
+
+function chargerSemaine() {
+  const msgErreur = document.getElementById('msg-erreur');
+  msgErreur.textContent = "";
+  fetch(URL_AGENDA + '?mode=admin&cle=' + encodeURIComponent(cleAdmin) + '&debut=' + encodeURIComponent(debutSemaineCourante))
+    .then(r => r.json())
+    .then(data => {
+      if (data.erreur) { msgErreur.textContent = data.erreur; return; }
+      document.getElementById('ecran-cle').style.display = 'none';
+      document.getElementById('vue-agenda').style.display = 'block';
+      afficherGrille(data);
+    })
+    .catch(() => { msgErreur.textContent = "Erreur de connexion."; });
+}
+
+document.getElementById('btn-prec').addEventListener('click', () => {
+  const d = parseDateFr(debutSemaineCourante);
+  d.setDate(d.getDate() - 7);
+  debutSemaineCourante = formatDateFr(d);
+  chargerSemaine();
+});
+document.getElementById('btn-suiv').addEventListener('click', () => {
+  const d = parseDateFr(debutSemaineCourante);
+  d.setDate(d.getDate() + 7);
+  debutSemaineCourante = formatDateFr(d);
+  chargerSemaine();
+});
+
+function minutesDepuisDebutGrille(heureStr) {
+  const [h, m] = heureStr.split(':').map(Number);
+  return (h - HEURE_DEBUT_GRILLE) * 60 + m;
+}
+
+function afficherGrille(data) {
+  const lundi = parseDateFr(data.debutSemaine);
+  document.getElementById('label-semaine').textContent =
+    "Semaine du " + data.debutSemaine;
+
+  const nbLignes = (HEURE_FIN_GRILLE - HEURE_DEBUT_GRILLE) * 2; // blocs de 30 min
+  const grille = document.getElementById('grille');
+  grille.innerHTML = '';
+  grille.style.gridTemplateRows = `36px repeat(${nbLignes}, 20px)`;
+
+  // Coin vide + en-têtes des 7 jours
+  grille.appendChild(document.createElement('div'));
+  const joursDates = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(lundi.getFullYear(), lundi.getMonth(), lundi.getDate() + i);
+    joursDates.push(formatDateFr(d));
+    const entete = document.createElement('div');
+    entete.className = 'entete-jour';
+    entete.textContent = JOURS_LABELS[i] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+    grille.appendChild(entete);
+  }
+
+  // Ligne des heures (colonne de gauche) + colonnes de jour (conteneurs relatifs)
+  grille.style.gridTemplateColumns = '64px repeat(7, 1fr)';
+  const colonnesJour = [];
+  for (let i = 0; i < 7; i++) {
+    const col = document.createElement('div');
+    col.className = 'colonne-jour';
+    col.style.gridColumn = String(i + 2);
+    col.style.gridRow = `2 / span ${nbLignes}`;
+    colonnesJour.push(col);
+  }
+
+  for (let ligne = 0; ligne < nbLignes; ligne++) {
+    if (ligne % 2 === 0) {
+      const caseHeure = document.createElement('div');
+      caseHeure.className = 'case-heure';
+      caseHeure.style.gridColumn = '1';
+      caseHeure.style.gridRow = `${ligne + 2} / span 2`;
+      caseHeure.textContent = (HEURE_DEBUT_GRILLE + ligne / 2) + 'h';
+      grille.appendChild(caseHeure);
+    }
+  }
+  colonnesJour.forEach(c => grille.appendChild(c));
+
+  function ajouterBloc(dateStr, heureStr, dureeMin, classe, contenuHtml) {
+    const idxJour = joursDates.indexOf(dateStr);
+    if (idxJour === -1) return; // hors semaine affichée
+    const top = minutesDepuisDebutGrille(heureStr);
+    if (top < 0) return;
+    const hauteur = dureeMin;
+    const bloc = document.createElement('div');
+    bloc.className = 'evenement ' + classe;
+    bloc.style.top = (top / 30 * 20) + 'px';
+    bloc.style.height = Math.max(hauteur / 30 * 20 - 2, 16) + 'px';
+    bloc.innerHTML = contenuHtml;
+    colonnesJour[idxJour].appendChild(bloc);
+  }
+
+  data.ateliers.forEach(a => {
+    ajouterBloc(a.date, a.heure, a.duree, 'atelier',
+      `<strong>${a.atelier}</strong>${a.reservees}/${a.capacite} inscrit(s)`);
+  });
+  data.individuels.forEach(s => {
+    const classe = s.type === 'Séance de couple' ? 'couple' : 'indiv';
+    ajouterBloc(s.date, s.heure, s.duree, classe,
+      `<strong>${s.type}</strong>${s.nom}`);
+  });
+  data.blocages.forEach(b => {
+    ajouterBloc(b.date, b.heure, b.dureeMinutes, 'blocage', `<strong>${b.titre}</strong>`);
+  });
+
+  if (!data.ateliers.length && !data.individuels.length && !data.blocages.length) {
+    const vide = document.createElement('p');
+    vide.className = 'creneaux-msg';
+    vide.textContent = "Rien de programmé cette semaine.";
+    document.getElementById('vue-agenda').appendChild(vide);
+  }
+}
+</script>
+
+</body>
+</html>
