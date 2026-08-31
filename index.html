@@ -149,6 +149,14 @@
 
   /* ---------- Réservation en ligne — grille calendrier ---------- */
   .creneaux-msg{color:var(--ink-soft); font-size:0.95rem; margin-top:16px;}
+  .cal-duree-choix{display:flex; flex-wrap:wrap; gap:10px; margin:18px 0 8px;}
+  .cal-duree-btn{
+    background:var(--bg); border:1.5px solid var(--line-alt); border-radius:30px;
+    padding:10px 18px; font-family:var(--font-texte); font-weight:600; font-size:0.9rem;
+    color:var(--ink); cursor:pointer; transition:background .15s ease, border-color .15s ease;
+  }
+  .cal-duree-btn:hover{border-color:var(--accent);}
+  .cal-duree-btn.actif{background:var(--accent); color:var(--bg); border-color:var(--accent);}
   .cal-entete{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin:18px 0 16px;}
   .cal-nav-btn{background:var(--bg); border:1px solid var(--line-alt); border-radius:8px; padding:8px 14px; cursor:pointer; font-family:var(--font-texte); font-size:0.9rem; color:var(--ink);}
   .cal-nav-btn:hover{border-color:var(--accent);}
@@ -300,6 +308,10 @@
     <div class="wrap">
       <span class="eyebrow">Réservation en ligne</span>
       <h2>Choisir un créneau</h2>
+      <div class="cal-duree-choix">
+        <button type="button" class="cal-duree-btn actif" data-duree="60">1 heure — individuelle ou couple</button>
+        <button type="button" class="cal-duree-btn" data-duree="120">2 heures — approfondissement</button>
+      </div>
       <div class="cal-entete">
         <button type="button" id="cal-prec" class="cal-nav-btn">← Semaine précédente</button>
         <span id="cal-label" class="cal-label"></span>
@@ -313,7 +325,7 @@
 
   <script>
   // MODIFIEZ ICI : la MÊME URL que celle utilisée dans ateliers.html
-  const URL_AGENDA = "https://script.google.com/macros/s/AKfycbwdHiG1aWbOv_4pZ-DcXc3W2GejHdFhrdJAJRAlegSMUDJyYP-gPADRBW6soa2SHINZZQ/exec";
+  const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
   const CAL_HEURE_DEBUT = 8, CAL_HEURE_FIN = 21;
   const CAL_JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
   const CAL_TYPES = [
@@ -323,7 +335,8 @@
   ];
 
   let calSemaine = null;
-  let calCache = null; // { "07/09/2026": ["09:00","09:30",...], ... }
+  let calCache = null; // { "07/09/2026": ["09:00","09:30",...], ... } — blocs de 30 min bruts
+  let calDureeChoisie = 60;
 
   function calLundiCetteSemaine() {
     const d = new Date(); d.setHours(0,0,0,0);
@@ -336,6 +349,30 @@
   function calMinutesDepuisDebut(heureStr) {
     const [h,m] = heureStr.split(':').map(Number);
     return (h - CAL_HEURE_DEBUT) * 60 + m;
+  }
+  function calVersMinutes(hhmm) {
+    const [h,m] = hhmm.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  /** Ne garde que les horaires de départ où assez de blocs de 30 min
+      consécutifs sont libres pour couvrir la durée choisie. */
+  function calCreneauxValidesPourDuree(dispoParJour, dureeMinutes) {
+    const blocsNecessaires = dureeMinutes / 30;
+    const resultat = {};
+    Object.keys(dispoParJour || {}).forEach(date => {
+      const heures = (dispoParJour[date] || []).slice().sort();
+      const minutesSet = new Set(heures.map(calVersMinutes));
+      const valides = heures.filter(h => {
+        const debut = calVersMinutes(h);
+        for (let j = 0; j < blocsNecessaires; j++) {
+          if (!minutesSet.has(debut + j * 30)) return false;
+        }
+        return true;
+      });
+      if (valides.length) resultat[date] = valides;
+    });
+    return resultat;
   }
 
   function calCharger() {
@@ -396,9 +433,10 @@
     colonnes.forEach(c => grille.appendChild(c));
 
     let auMoinsUnCreneau = false;
+    const creneauxValides = calCreneauxValidesPourDuree(calCache, calDureeChoisie);
 
     joursDates.forEach((dateStr, idxJour) => {
-      const heuresLibres = (calCache && calCache[dateStr]) || [];
+      const heuresLibres = creneauxValides[dateStr] || [];
       heuresLibres.forEach(heure => {
         auMoinsUnCreneau = true;
         const top = calMinutesDepuisDebut(heure);
@@ -407,7 +445,7 @@
         cellule.type = 'button';
         cellule.className = 'cal-cellule-libre';
         cellule.style.top = (top / 30 * 20) + 'px';
-        cellule.style.height = (20 - 2) + 'px';
+        cellule.style.height = (calDureeChoisie / 30 * 20 - 2) + 'px';
         cellule.title = heure;
         cellule.addEventListener('click', () => calOuvrirFormulaire(dateStr, heure));
         colonnes[idxJour].appendChild(cellule);
@@ -427,22 +465,37 @@
     const form = document.createElement('form');
     form.className = 'creneau-form';
 
-    const boutonsType = CAL_TYPES.map(t =>
-      `<button type="button" class="cal-type-btn" data-type="${t.valeur}">${t.label} — ${t.prix}</button>`
-    ).join('');
+    if (calDureeChoisie === 120) {
+      // Une seule option à 2h : on saute directement à approfondissement
+      form.innerHTML = `
+        <p style="font-weight:600; margin:0 0 10px;">Séance d'approfondissement — ${date} à ${heure}</p>
+        <input type="hidden" name="type" value="approfondissement">
+        <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
+        <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+        <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
+        <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
+        <p class="creneau-form-msg"></p>
+      `;
+    } else {
+      const typesUneHeure = CAL_TYPES.filter(t => t.valeur !== 'approfondissement');
+      const boutonsType = typesUneHeure.map(t =>
+        `<button type="button" class="cal-type-btn" data-type="${t.valeur}">${t.label} — ${t.prix}</button>`
+      ).join('');
 
-    form.innerHTML = `
-      <p style="font-weight:600; margin:0 0 10px;">${date} à ${heure}</p>
-      <p style="font-size:0.88rem; font-weight:600; margin:0 0 8px;">Quel type de séance ?</p>
-      <div class="cal-type-choix">${boutonsType}</div>
-      <input type="hidden" name="type" required>
-      <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
-      <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
-      <label>Email<input type="email" name="email" required autocomplete="email"></label>
-      <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
-      <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
-      <p class="creneau-form-msg"></p>
-    `;
+      form.innerHTML = `
+        <p style="font-weight:600; margin:0 0 10px;">${date} à ${heure}</p>
+        <p style="font-size:0.88rem; font-weight:600; margin:0 0 8px;">Individuelle ou couple ?</p>
+        <div class="cal-type-choix">${boutonsType}</div>
+        <input type="hidden" name="type" required>
+        <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
+        <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+        <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
+        <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
+        <p class="creneau-form-msg"></p>
+      `;
+    }
 
     form.querySelectorAll('.cal-type-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -481,6 +534,16 @@
     zone.appendChild(form);
     form.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
+
+  document.querySelectorAll('.cal-duree-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cal-duree-btn').forEach(b => b.classList.remove('actif'));
+      btn.classList.add('actif');
+      calDureeChoisie = Number(btn.dataset.duree);
+      document.getElementById('cal-formulaire').innerHTML = '';
+      calAfficherSemaine();
+    });
+  });
 
   document.getElementById('cal-prec').addEventListener('click', () => {
     calSemaine.setDate(calSemaine.getDate() - 7);
