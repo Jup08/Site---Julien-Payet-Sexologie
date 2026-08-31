@@ -158,18 +158,25 @@
   .cal-entete-jour{padding:8px 4px; text-align:center; font-weight:700; font-size:0.78rem; border-bottom:1px solid var(--line); border-left:1px solid var(--line);}
   .cal-case-heure{font-size:0.7rem; color:var(--ink-soft); text-align:right; padding:1px 6px 0 0; border-top:1px solid var(--line);}
   .cal-colonne{position:relative; border-left:1px solid var(--line); border-top:1px solid var(--line); background:repeating-linear-gradient(to bottom, transparent, transparent 39px, var(--line-alt) 40px);}
-  .cal-bloc{
-    position:absolute; left:2px; right:2px; border-radius:6px; padding:3px 5px;
-    font-size:0.68rem; line-height:1.2; color:#fff; overflow:hidden; text-align:left;
-    background:var(--accent); border:none; cursor:pointer; font-family:var(--font-texte);
+  .cal-cellule-libre{
+    position:absolute; left:1px; right:1px; border-radius:3px;
+    background:rgba(63,83,73,0.16); border:1px solid rgba(63,83,73,0.3);
+    cursor:pointer; transition:background .12s ease;
   }
-  .cal-bloc:hover{background:var(--accent-soft);}
-  .cal-bloc strong{display:block; font-size:0.7rem;}
-  .creneau-form{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:20px; margin-top:20px; display:grid; gap:12px; max-width:360px;}
+  .cal-cellule-libre:hover{background:var(--accent); border-color:var(--accent);}
+  .creneau-form{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:20px; margin-top:20px; display:grid; gap:12px; max-width:400px;}
   .creneau-form label{font-size:0.88rem; font-weight:600; display:grid; gap:4px;}
   .creneau-form input{padding:10px 12px; border:1px solid var(--line-alt); border-radius:8px; font-family:var(--font-texte); font-size:0.95rem; background:var(--bg);}
   .creneau-form input:focus{outline:3px solid var(--accent); outline-offset:1px;}
   .creneau-form-msg{font-size:0.9rem; margin:0; min-height:1.2em;}
+  .cal-type-choix{display:flex; flex-direction:column; gap:8px; margin-bottom:6px;}
+  .cal-type-btn{
+    background:var(--bg); border:1.5px solid var(--line-alt); border-radius:8px;
+    padding:10px 14px; font-family:var(--font-texte); font-weight:600; font-size:0.9rem;
+    color:var(--ink); cursor:pointer; text-align:left; transition:border-color .15s ease, background .15s ease;
+  }
+  .cal-type-btn:hover{border-color:var(--accent);}
+  .cal-type-btn.actif{background:var(--accent); color:var(--bg); border-color:var(--accent);}
 
   footer{background:var(--bg); border-top:1px solid var(--line); padding:56px 0 36px;}
   .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:36px;}
@@ -306,13 +313,17 @@
 
   <script>
   // MODIFIEZ ICI : la MÊME URL que celle utilisée dans ateliers.html
-  const URL_AGENDA = "https://script.google.com/macros/s/AKfycbwdHiG1aWbOv_4pZ-DcXc3W2GejHdFhrdJAJRAlegSMUDJyYP-gPADRBW6soa2SHINZZQ/exec";
-  const CAL_CATEGORIE = 'individuel';
+  const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
   const CAL_HEURE_DEBUT = 8, CAL_HEURE_FIN = 21;
   const CAL_JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+  const CAL_TYPES = [
+    { valeur: 'individuelle', label: 'Séance individuelle', prix: '60€' },
+    { valeur: 'couple', label: 'Séance de couple', prix: '80€' },
+    { valeur: 'approfondissement', label: "Séance d'approfondissement", prix: '120€' }
+  ];
 
   let calSemaine = null;
-  let calCache = null;
+  let calCache = null; // { "07/09/2026": ["09:00","09:30",...], ... }
 
   function calLundiCetteSemaine() {
     const d = new Date(); d.setHours(0,0,0,0);
@@ -322,10 +333,6 @@
   function calFormatDate(d) {
     return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
   }
-  function calParseDate(s) {
-    const [j,m,a] = s.split('/').map(Number);
-    return new Date(a, m-1, j);
-  }
   function calMinutesDepuisDebut(heureStr) {
     const [h,m] = heureStr.split(':').map(Number);
     return (h - CAL_HEURE_DEBUT) * 60 + m;
@@ -333,7 +340,7 @@
 
   function calCharger() {
     document.getElementById('cal-msg').style.display = 'none';
-    fetch(URL_AGENDA + '?categorie=' + CAL_CATEGORIE + '&_=' + Date.now(), { cache: 'no-store' })
+    fetch(URL_AGENDA + '?categorie=libre&_=' + Date.now(), { cache: 'no-store' })
       .then(r => r.json())
       .then(data => { calCache = data; calAfficherSemaine(); })
       .catch(() => {
@@ -388,36 +395,47 @@
     }
     colonnes.forEach(c => grille.appendChild(c));
 
-    const creneauxSemaine = (calCache || []).filter(c => joursDates.includes(c.date));
+    let auMoinsUnCreneau = false;
 
-    if (!creneauxSemaine.length) {
+    joursDates.forEach((dateStr, idxJour) => {
+      const heuresLibres = (calCache && calCache[dateStr]) || [];
+      heuresLibres.forEach(heure => {
+        auMoinsUnCreneau = true;
+        const top = calMinutesDepuisDebut(heure);
+        if (top < 0) return;
+        const cellule = document.createElement('button');
+        cellule.type = 'button';
+        cellule.className = 'cal-cellule-libre';
+        cellule.style.top = (top / 30 * 20) + 'px';
+        cellule.style.height = (20 - 2) + 'px';
+        cellule.title = heure;
+        cellule.addEventListener('click', () => calOuvrirFormulaire(dateStr, heure));
+        colonnes[idxJour].appendChild(cellule);
+      });
+    });
+
+    if (!auMoinsUnCreneau) {
       const msg = document.getElementById('cal-msg');
       msg.style.display = 'block';
       msg.textContent = "Aucun créneau disponible cette semaine — essayez la semaine suivante, ou appelez au 06 62 64 88 90.";
     }
-
-    creneauxSemaine.forEach(c => {
-      const idxJour = joursDates.indexOf(c.date);
-      const top = calMinutesDepuisDebut(c.heure);
-      if (top < 0) return;
-      const bloc = document.createElement('button');
-      bloc.type = 'button';
-      bloc.className = 'cal-bloc';
-      bloc.style.top = (top / 30 * 20) + 'px';
-      bloc.style.height = Math.max(60 / 30 * 20 - 2, 16) + 'px';
-      bloc.innerHTML = `<strong>${c.heure}</strong>${c.intitule}`;
-      bloc.addEventListener('click', () => calOuvrirFormulaire(c));
-      colonnes[idxJour].appendChild(bloc);
-    });
   }
 
-  function calOuvrirFormulaire(c) {
+  function calOuvrirFormulaire(date, heure) {
     const zone = document.getElementById('cal-formulaire');
     zone.innerHTML = '';
     const form = document.createElement('form');
     form.className = 'creneau-form';
+
+    const boutonsType = CAL_TYPES.map(t =>
+      `<button type="button" class="cal-type-btn" data-type="${t.valeur}">${t.label} — ${t.prix}</button>`
+    ).join('');
+
     form.innerHTML = `
-      <p style="font-weight:600; margin:0 0 6px;">${c.intitule} — ${c.date} à ${c.heure}</p>
+      <p style="font-weight:600; margin:0 0 10px;">${date} à ${heure}</p>
+      <p style="font-size:0.88rem; font-weight:600; margin:0 0 8px;">Quel type de séance ?</p>
+      <div class="cal-type-choix">${boutonsType}</div>
+      <input type="hidden" name="type" required>
       <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
       <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
       <label>Email<input type="email" name="email" required autocomplete="email"></label>
@@ -425,11 +443,28 @@
       <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
       <p class="creneau-form-msg"></p>
     `;
+
+    form.querySelectorAll('.cal-type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        form.querySelectorAll('.cal-type-btn').forEach(b => b.classList.remove('actif'));
+        btn.classList.add('actif');
+        form.type.value = btn.dataset.type;
+      });
+    });
+
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
       const msgEl = form.querySelector('.creneau-form-msg');
+      if (!form.type.value) {
+        msgEl.textContent = "⚠️ Merci de choisir un type de séance.";
+        return;
+      }
       msgEl.textContent = "Envoi en cours…";
-      const data = { slotId: c.id, nom: form.nom.value, email: form.email.value, telephone: form.telephone.value, siteWeb: form.siteWeb.value };
+      const data = {
+        mode: 'libre', date, heure, type: form.type.value,
+        nom: form.nom.value, email: form.email.value,
+        telephone: form.telephone.value, siteWeb: form.siteWeb.value
+      };
       fetch(URL_AGENDA, { method: 'POST', body: JSON.stringify(data) })
         .then(r => r.json())
         .then(res => {
