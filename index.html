@@ -147,24 +147,29 @@
   .procall-box h3{font-size:1.15rem; margin-bottom:6px;}
   .procall-box p{margin:0; color:var(--ink); font-size:0.95rem; max-width:440px;}
 
-  /* ---------- Réservation en ligne ---------- */
-  .creneaux-liste{max-width:680px; margin-top:8px;}
-  .creneaux-msg{color:var(--ink-soft); font-size:0.95rem;}
-  .jour-bloc{margin-bottom:22px;}
-  .jour-titre{
-    font-family:var(--font-titre); font-size:1.05rem; font-weight:600;
-    color:var(--accent); margin-bottom:10px; padding-bottom:6px;
-    border-bottom:1px solid var(--line-alt);
+  /* ---------- Réservation en ligne — grille calendrier ---------- */
+  .creneaux-msg{color:var(--ink-soft); font-size:0.95rem; margin-top:16px;}
+  .cal-entete{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin:18px 0 16px;}
+  .cal-nav-btn{background:var(--bg); border:1px solid var(--line-alt); border-radius:8px; padding:8px 14px; cursor:pointer; font-family:var(--font-texte); font-size:0.9rem; color:var(--ink);}
+  .cal-nav-btn:hover{border-color:var(--accent);}
+  .cal-label{font-weight:700; font-size:0.95rem;}
+  .cal-scroll{overflow-x:auto; border:1px solid var(--line); border-radius:10px; background:var(--bg);}
+  .cal-grille{display:grid; min-width:760px;}
+  .cal-entete-jour{padding:8px 4px; text-align:center; font-weight:700; font-size:0.78rem; border-bottom:1px solid var(--line); border-left:1px solid var(--line);}
+  .cal-case-heure{font-size:0.7rem; color:var(--ink-soft); text-align:right; padding:1px 6px 0 0; border-top:1px solid var(--line);}
+  .cal-colonne{position:relative; border-left:1px solid var(--line); border-top:1px solid var(--line); background:repeating-linear-gradient(to bottom, transparent, transparent 39px, var(--line-alt) 40px);}
+  .cal-bloc{
+    position:absolute; left:2px; right:2px; border-radius:6px; padding:3px 5px;
+    font-size:0.68rem; line-height:1.2; color:#fff; overflow:hidden; text-align:left;
+    background:var(--accent); border:none; cursor:pointer; font-family:var(--font-texte);
   }
-  .creneau-item{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:18px 22px; margin-bottom:14px;}
-  .creneau-info{margin-bottom:12px;}
-  .creneau-info strong{font-size:1.02rem;}
-  .creneau-form{display:grid; gap:12px; margin-top:14px; padding-top:14px; border-top:1px solid var(--line-alt); max-width:360px;}
+  .cal-bloc:hover{background:var(--accent-soft);}
+  .cal-bloc strong{display:block; font-size:0.7rem;}
+  .creneau-form{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:20px; margin-top:20px; display:grid; gap:12px; max-width:360px;}
   .creneau-form label{font-size:0.88rem; font-weight:600; display:grid; gap:4px;}
   .creneau-form input{padding:10px 12px; border:1px solid var(--line-alt); border-radius:8px; font-family:var(--font-texte); font-size:0.95rem; background:var(--bg);}
   .creneau-form input:focus{outline:3px solid var(--accent); outline-offset:1px;}
   .creneau-form-msg{font-size:0.9rem; margin:0; min-height:1.2em;}
-  .btn-reserver{font-size:0.9rem; padding:10px 20px;}
 
   footer{background:var(--bg); border-top:1px solid var(--line); padding:56px 0 36px;}
   .foot-grid{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:36px;}
@@ -287,81 +292,132 @@
   <section class="block block-sand" id="reserver-en-ligne">
     <div class="wrap">
       <span class="eyebrow">Réservation en ligne</span>
-      <h2>Prochains créneaux disponibles</h2>
-      <div id="creneaux-liste" class="creneaux-liste">
-        <p class="creneaux-msg">Chargement des disponibilités…</p>
+      <h2>Choisir un créneau</h2>
+      <div class="cal-entete">
+        <button type="button" id="cal-prec" class="cal-nav-btn">← Semaine précédente</button>
+        <span id="cal-label" class="cal-label"></span>
+        <button type="button" id="cal-suiv" class="cal-nav-btn">Semaine suivante →</button>
       </div>
+      <div class="cal-scroll"><div class="cal-grille" id="cal-grille"></div></div>
+      <div id="cal-formulaire"></div>
+      <p class="creneaux-msg" id="cal-msg" style="display:none;"></p>
     </div>
   </section>
 
   <script>
   // MODIFIEZ ICI : la MÊME URL que celle utilisée dans ateliers.html
-  const URL_AGENDA = "https://script.google.com/macros/s/AKfycbwdHiG1aWbOv_4pZ-DcXc3W2GejHdFhrdJAJRAlegSMUDJyYP-gPADRBW6soa2SHINZZQ/exec";
+  const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
+  const CAL_CATEGORIE = 'individuel';
+  const CAL_HEURE_DEBUT = 8, CAL_HEURE_FIN = 21;
+  const CAL_JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
 
-  const listeEl = document.getElementById('creneaux-liste');
+  let calSemaine = null;
+  let calCache = null;
 
-  function versDateTri(dateStr) {
-    const [j, m, a] = dateStr.split('/').map(Number);
-    return new Date(a, m - 1, j).getTime();
+  function calLundiCetteSemaine() {
+    const d = new Date(); d.setHours(0,0,0,0);
+    d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+    return d;
+  }
+  function calFormatDate(d) {
+    return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+  }
+  function calParseDate(s) {
+    const [j,m,a] = s.split('/').map(Number);
+    return new Date(a, m-1, j);
+  }
+  function calMinutesDepuisDebut(heureStr) {
+    const [h,m] = heureStr.split(':').map(Number);
+    return (h - CAL_HEURE_DEBUT) * 60 + m;
   }
 
-  function grouperParDate(creneaux) {
-    const groupes = {};
-    creneaux.forEach(c => {
-      if (!groupes[c.date]) groupes[c.date] = [];
-      groupes[c.date].push(c);
-    });
-    return Object.keys(groupes)
-      .sort((a, b) => versDateTri(a) - versDateTri(b))
-      .map(date => ({ date, items: groupes[date].sort((a, b) => a.heure.localeCompare(b.heure)) }));
-  }
-
-  function chargerCreneaux() {
-    listeEl.innerHTML = '<p class="creneaux-msg">Chargement des disponibilités…</p>';
-    fetch(URL_AGENDA + '?categorie=individuel&_=' + Date.now(), { cache: 'no-store' })
+  function calCharger() {
+    document.getElementById('cal-msg').style.display = 'none';
+    fetch(URL_AGENDA + '?categorie=' + CAL_CATEGORIE + '&_=' + Date.now(), { cache: 'no-store' })
       .then(r => r.json())
-      .then(creneaux => {
-        if (!creneaux.length) {
-          listeEl.innerHTML = '<p class="creneaux-msg">Aucun créneau disponible actuellement — appelez directement au 06 62 64 88 90.</p>';
-          return;
-        }
-        listeEl.innerHTML = '';
-        grouperParDate(creneaux).forEach(groupe => listeEl.appendChild(creerBlocJour(groupe)));
-      })
+      .then(data => { calCache = data; calAfficherSemaine(); })
       .catch(() => {
-        listeEl.innerHTML = '<p class="creneaux-msg">Impossible de charger les disponibilités. Vous pouvez réserver par téléphone au 06 62 64 88 90.</p>';
+        const msg = document.getElementById('cal-msg');
+        msg.style.display = 'block';
+        msg.textContent = "Impossible de charger les disponibilités. Vous pouvez réserver par téléphone au 06 62 64 88 90.";
       });
   }
 
-  function creerBlocJour(groupe) {
-    const bloc = document.createElement('div');
-    bloc.className = 'jour-bloc';
-    const titre = document.createElement('div');
-    titre.className = 'jour-titre';
-    titre.textContent = groupe.date;
-    bloc.appendChild(titre);
-    groupe.items.forEach(c => bloc.appendChild(creerLigneCreneau(c)));
-    return bloc;
+  function calAfficherSemaine() {
+    if (!calSemaine) calSemaine = calLundiCetteSemaine();
+    document.getElementById('cal-label').textContent = "Semaine du " + calFormatDate(calSemaine);
+    document.getElementById('cal-formulaire').innerHTML = '';
+
+    const joursDates = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(calSemaine.getFullYear(), calSemaine.getMonth(), calSemaine.getDate() + i);
+      joursDates.push(calFormatDate(d));
+    }
+
+    const nbLignes = (CAL_HEURE_FIN - CAL_HEURE_DEBUT) * 2;
+    const grille = document.getElementById('cal-grille');
+    grille.innerHTML = '';
+    grille.style.gridTemplateRows = `36px repeat(${nbLignes}, 20px)`;
+    grille.style.gridTemplateColumns = '58px repeat(7, 1fr)';
+
+    grille.appendChild(document.createElement('div'));
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(calSemaine.getFullYear(), calSemaine.getMonth(), calSemaine.getDate() + i);
+      const entete = document.createElement('div');
+      entete.className = 'cal-entete-jour';
+      entete.textContent = CAL_JOURS[i] + ' ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
+      grille.appendChild(entete);
+    }
+
+    const colonnes = [];
+    for (let i = 0; i < 7; i++) {
+      const col = document.createElement('div');
+      col.className = 'cal-colonne';
+      col.style.gridColumn = String(i + 2);
+      col.style.gridRow = `2 / span ${nbLignes}`;
+      colonnes.push(col);
+    }
+    for (let ligne = 0; ligne < nbLignes; ligne++) {
+      if (ligne % 2 === 0) {
+        const caseHeure = document.createElement('div');
+        caseHeure.className = 'cal-case-heure';
+        caseHeure.style.gridRow = `${ligne + 2} / span 2`;
+        caseHeure.textContent = (CAL_HEURE_DEBUT + ligne / 2) + 'h';
+        grille.appendChild(caseHeure);
+      }
+    }
+    colonnes.forEach(c => grille.appendChild(c));
+
+    const creneauxSemaine = (calCache || []).filter(c => joursDates.includes(c.date));
+
+    if (!creneauxSemaine.length) {
+      const msg = document.getElementById('cal-msg');
+      msg.style.display = 'block';
+      msg.textContent = "Aucun créneau disponible cette semaine — essayez la semaine suivante, ou appelez au 06 62 64 88 90.";
+    }
+
+    creneauxSemaine.forEach(c => {
+      const idxJour = joursDates.indexOf(c.date);
+      const top = calMinutesDepuisDebut(c.heure);
+      if (top < 0) return;
+      const bloc = document.createElement('button');
+      bloc.type = 'button';
+      bloc.className = 'cal-bloc';
+      bloc.style.top = (top / 30 * 20) + 'px';
+      bloc.style.height = Math.max(60 / 30 * 20 - 2, 16) + 'px';
+      bloc.innerHTML = `<strong>${c.heure}</strong>${c.intitule}`;
+      bloc.addEventListener('click', () => calOuvrirFormulaire(c));
+      colonnes[idxJour].appendChild(bloc);
+    });
   }
 
-  function creerLigneCreneau(c) {
-    const ligne = document.createElement('div');
-    ligne.className = 'creneau-item';
-    ligne.innerHTML = `
-      <div class="creneau-info">
-        <strong>${c.heure} — ${c.intitule}</strong>
-      </div>
-      <button class="btn btn-primary btn-reserver" type="button">Réserver</button>
-    `;
-    ligne.querySelector('.btn-reserver').addEventListener('click', () => ouvrirFormulaire(ligne, c));
-    return ligne;
-  }
-
-  function ouvrirFormulaire(ligne, c) {
-    if (ligne.querySelector('.creneau-form')) return;
+  function calOuvrirFormulaire(c) {
+    const zone = document.getElementById('cal-formulaire');
+    zone.innerHTML = '';
     const form = document.createElement('form');
     form.className = 'creneau-form';
     form.innerHTML = `
+      <p style="font-weight:600; margin:0 0 6px;">${c.intitule} — ${c.date} à ${c.heure}</p>
       <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
       <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
       <label>Email<input type="email" name="email" required autocomplete="email"></label>
@@ -373,27 +429,34 @@
       ev.preventDefault();
       const msgEl = form.querySelector('.creneau-form-msg');
       msgEl.textContent = "Envoi en cours…";
-      const data = {
-        slotId: c.id, nom: form.nom.value, email: form.email.value,
-        telephone: form.telephone.value, siteWeb: form.siteWeb.value
-      };
+      const data = { slotId: c.id, nom: form.nom.value, email: form.email.value, telephone: form.telephone.value, siteWeb: form.siteWeb.value };
       fetch(URL_AGENDA, { method: 'POST', body: JSON.stringify(data) })
         .then(r => r.json())
         .then(res => {
           if (res.success) {
             msgEl.textContent = "✅ Rendez-vous confirmé — un email de confirmation vous a été envoyé.";
             form.querySelector('button[type=submit]').disabled = true;
-            setTimeout(chargerCreneaux, 2000);
+            setTimeout(calCharger, 2000);
           } else {
             msgEl.textContent = "⚠️ " + (res.message || "Une erreur est survenue.");
           }
         })
         .catch(() => { msgEl.textContent = "⚠️ Erreur de connexion, réessayez."; });
     });
-    ligne.appendChild(form);
+    zone.appendChild(form);
+    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
-  chargerCreneaux();
+  document.getElementById('cal-prec').addEventListener('click', () => {
+    calSemaine.setDate(calSemaine.getDate() - 7);
+    calAfficherSemaine();
+  });
+  document.getElementById('cal-suiv').addEventListener('click', () => {
+    calSemaine.setDate(calSemaine.getDate() + 7);
+    calAfficherSemaine();
+  });
+
+  calCharger();
   </script>
 
   <section class="block block-sand">
