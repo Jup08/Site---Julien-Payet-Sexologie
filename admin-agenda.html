@@ -95,7 +95,7 @@
 
 <script>
 // MODIFIEZ ICI : la MÊME URL d'application web que celle utilisée dans ateliers.html et index.html
-const URL_AGENDA = "https://script.google.com/macros/s/AKfycbyypt_UPKUibOtCuRHa9I4uoKv1-amtOoEPEKCKyU6qKE-BrX1I4wvNnjoMCGv59my0UQ/exec";
+const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
 
 const HEURE_DEBUT_GRILLE = 8;   // 8h du matin
 const HEURE_FIN_GRILLE = 21;    // 21h
@@ -218,20 +218,21 @@ function afficherGrille(data) {
     colonnesJour[idxJour].appendChild(bloc);
   }
 
-  data.ateliers.forEach(a => {
-    ajouterBloc(a.date, a.heure, a.duree, 'atelier',
-      `<strong>${a.atelier}</strong>${a.reservees}/${a.capacite} inscrit(s)`);
-  });
-  data.individuels.forEach(s => {
-    const classe = s.type === 'Séance de couple' ? 'couple' : 'indiv';
-    ajouterBloc(s.date, s.heure, s.duree, classe,
-      `<strong>${s.type}</strong>${s.nom}`);
+  data.creneaux.forEach(c => {
+    if (c.categorie === 'atelier') {
+      ajouterBloc(c.date, c.heure, c.duree, 'atelier',
+        `<strong>${c.intitule}</strong>${c.reservees}/${c.capacite} inscrit(s)`);
+    } else {
+      const classe = c.intitule === 'Séance de couple' ? 'couple' : 'indiv';
+      ajouterBloc(c.date, c.heure, c.duree, classe,
+        `<strong>${c.intitule}</strong>${c.reservees}/${c.capacite} inscrit(s)`);
+    }
   });
   data.blocages.forEach(b => {
     ajouterBloc(b.date, b.heure, b.dureeMinutes, 'blocage', `<strong>${b.titre}</strong>`);
   });
 
-  if (!data.ateliers.length && !data.individuels.length && !data.blocages.length) {
+  if (!data.creneaux.length && !data.blocages.length) {
     const vide = document.createElement('p');
     vide.className = 'creneaux-msg';
     vide.textContent = "Rien de programmé cette semaine.";
