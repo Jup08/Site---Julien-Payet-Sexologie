@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic — Julien Payet</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{ --bg:#FAF6EF; --ink:#3A2E22; --ink-soft:#7A6F5F; --accent:#2C3C33; --line:#E1D8C5; --ok:#1baf7a; --ko:#c0392b; }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', system-ui, sans-serif;}
+  .wrap{max-width:880px; margin:0 auto; padding:32px 20px 60px;}
+  h1{font-size:1.4rem; margin:0 0 6px;}
+  p.sub{color:var(--ink-soft); margin:0 0 24px; font-size:0.9rem;}
+  #ecran-cle{max-width:340px; margin:15vh auto; text-align:center;}
+  #ecran-cle input{width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:8px; font-size:1rem; margin:16px 0;}
+  #ecran-cle button{background:var(--accent); color:#fff; border:none; border-radius:8px; padding:12px 24px; font-weight:600; cursor:pointer;}
+  .carte{background:#fff; border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin-bottom:16px;}
+  .carte h2{font-size:1rem; margin:0 0 10px; display:flex; align-items:center; gap:8px;}
+  .puce{width:10px; height:10px; border-radius:50%; display:inline-block;}
+  .puce.ok{background:var(--ok);}
+  .puce.ko{background:var(--ko);}
+  table{width:100%; border-collapse:collapse; font-size:0.88rem;}
+  td, th{padding:6px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;}
+  th{color:var(--ink-soft); font-weight:600;}
+  pre{white-space:pre-wrap; font-size:0.82rem; background:#f5f0e6; padding:10px; border-radius:6px; overflow-x:auto;}
+  .msg-erreur{color:var(--ko); font-size:0.9rem;}
+  .btn-refresh{background:var(--accent); color:#fff; border:none; border-radius:8px; padding:10px 18px; font-weight:600; cursor:pointer; margin-bottom:20px;}
+</style>
+</head>
+<body>
+
+<div id="ecran-cle">
+  <h1>Diagnostic — accès privé</h1>
+  <p class="sub">Entrez votre clé pour afficher le rapport.</p>
+  <input type="password" id="champ-cle" placeholder="Votre clé secrète" autocomplete="off">
+  <br><button id="btn-connexion">Afficher le diagnostic</button>
+  <p class="msg-erreur" id="msg-erreur"></p>
+</div>
+
+<div class="wrap" id="vue-diag" style="display:none;">
+  <h1>Rapport de diagnostic</h1>
+  <p class="sub" id="horodatage"></p>
+  <button class="btn-refresh" id="btn-refresh">🔄 Relancer le diagnostic</button>
+  <div id="contenu"></div>
+</div>
+
+<script>
+// MODIFIEZ ICI : la MÊME URL que celle utilisée dans les autres pages
+const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
+let cleAdmin = "";
+
+document.getElementById('btn-connexion').addEventListener('click', charger);
+document.getElementById('champ-cle').addEventListener('keydown', e => { if (e.key === 'Enter') charger(); });
+document.getElementById('btn-refresh').addEventListener('click', charger);
+
+function charger() {
+  cleAdmin = document.getElementById('champ-cle').value || cleAdmin;
+  const msgErreur = document.getElementById('msg-erreur');
+  msgErreur.textContent = "Chargement…";
+  fetch(URL_AGENDA + '?mode=diagnostic&cle=' + encodeURIComponent(cleAdmin) + '&_=' + Date.now(), { cache: 'no-store' })
+    .then(r => r.json())
+    .then(data => {
+      if (data.erreur) { msgErreur.textContent = data.erreur; return; }
+      msgErreur.textContent = "";
+      document.getElementById('ecran-cle').style.display = 'none';
+      document.getElementById('vue-diag').style.display = 'block';
+      afficher(data);
+    })
+    .catch(() => { msgErreur.textContent = "Erreur de connexion au script."; });
+}
+
+function carte(titre, ok, htmlInterieur) {
+  return `<div class="carte"><h2><span class="puce ${ok ? 'ok' : 'ko'}"></span>${titre}</h2>${htmlInterieur}</div>`;
+}
+
+function afficher(d) {
+  document.getElementById('horodatage').textContent = "Généré le " + d.horodatage + " (fuseau du script : " + d.fuseauHoraireScript + ")";
+  let html = '';
+
+  // Agenda par défaut
+  if (d.agendaParDefaut && !d.agendaParDefaut.erreur) {
+    html += carte("Agenda lu par le script", true,
+      `<table><tr><th>Nom</th><td>${d.agendaParDefaut.nom}</td></tr>
+       <tr><th>Identifiant</th><td>${d.agendaParDefaut.id}</td></tr></table>
+       <p style="font-size:0.85rem; color:#7A6F5F; margin-top:8px;">Si ce n'est pas le nom de votre agenda principal habituel, c'est la cause probable des créneaux personnels qui n'apparaissent pas correctement.</p>`);
+  } else {
+    html += carte("Agenda lu par le script", false, `<p class="msg-erreur">${(d.agendaParDefaut||{}).erreur || 'Inconnu'}</p>`);
+  }
+
+  // Événements des 14 prochains jours
+  if (Array.isArray(d.evenementsAgendaProchains14Jours)) {
+    const lignes = d.evenementsAgendaProchains14Jours.map(ev =>
+      `<tr><td>${ev.titre}</td><td>${ev.debut}</td><td>${ev.fin}</td></tr>`).join('');
+    html += carte(`Événements vus par le script (14 prochains jours) — ${d.nombreTotalEvenements14Jours} au total`, true,
+      d.evenementsAgendaProchains14Jours.length
+        ? `<table><tr><th>Titre</th><th>Début</th><th>Fin</th></tr>${lignes}</table>
+           <p style="font-size:0.85rem; color:#7A6F5F; margin-top:8px;">Cherchez ici le créneau que vous avez posé sur votre téléphone. S'il n'y est pas, c'est qu'il n'a pas été enregistré sur cet agenda précis (voir la carte ci-dessus).</p>`
+        : `<p style="font-size:0.85rem; color:#7A6F5F;">Aucun événement trouvé sur les 14 prochains jours.</p>`);
+  } else {
+    html += carte("Événements agenda", false, `<p class="msg-erreur">${(d.evenementsAgendaProchains14Jours||{}).erreur || 'Inconnu'}</p>`);
+  }
+
+  // Onglet Creneaux
+  if (d.creneauxEntetes) {
+    html += carte(`Onglet "Creneaux" — ${d.creneauxNombreLignes} ligne(s) de données`, true,
+      `<p style="font-size:0.85rem;"><strong>En-têtes lus :</strong> ${d.creneauxEntetes.join(' | ')}</p>
+       <pre>${JSON.stringify(d.creneauxTroisPremieresLignes, null, 2)}</pre>`);
+  } else {
+    html += carte('Onglet "Creneaux"', false, `<p class="msg-erreur">${(d.creneauxSheet||{}).erreur || 'Inconnu'}</p>`);
+  }
+
+  // Onglet Reservations
+  if (typeof d.reservationsNombreLignes === 'number') {
+    html += carte(`Onglet "Reservations" — ${d.reservationsNombreLignes} réservation(s) enregistrée(s)`, true, '');
+  } else {
+    html += carte('Onglet "Reservations"', false, `<p class="msg-erreur">${(d.reservationsSheet||{}).erreur || 'Inconnu'}</p>`);
+  }
+
+  // Aperçu plages ouvertes
+  if (d.apercuLibresProchains7Jours) {
+    html += carte("Aperçu des plages ouvertes (calcul brut)", true,
+      `<p style="font-size:0.85rem; margin-bottom:6px;"><strong>Libres :</strong></p>
+       <pre>${JSON.stringify(d.apercuLibresProchains7Jours, null, 2)}</pre>
+       <p style="font-size:0.85rem; margin-bottom:6px;"><strong>Sous réserve (bloqué par un atelier) :</strong></p>
+       <pre>${JSON.stringify(d.apercuSousReserveProchains7Jours, null, 2)}</pre>`);
+  } else {
+    html += carte("Calcul des plages ouvertes", false, `<p class="msg-erreur">${(d.calculPlagesOuvertes||{}).erreur || 'Inconnu'}</p>`);
+  }
+
+  document.getElementById('contenu').innerHTML = html;
+}
+</script>
+
+</body>
+</html>

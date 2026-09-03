@@ -91,12 +91,12 @@
   }
 
   /* ---------- Bandes latérales de cadrage ---------- */
-  body::before, body::after{
-    content:""; position:fixed; top:0; bottom:0; width:6px; background:var(--accent);
-    z-index:60; pointer-events:none;
+  .bande-cadre{
+    position:fixed; top:0; bottom:0; width:8px; background:var(--accent);
+    z-index:9999; pointer-events:none;
   }
-  body::before{left:0;}
-  body::after{right:0;}
+  .bande-gauche{left:0;}
+  .bande-droite{right:0;}
 
   /* ---------- SECTIONS PLEINE LARGEUR (le rythme de blocs) ---------- */
   .block{padding:88px 0;}
@@ -197,6 +197,12 @@
     cursor:pointer; transition:background .12s ease;
   }
   .cal-cellule-libre:hover{background:var(--accent); border-color:var(--accent);}
+  .cal-cellule-reserve{
+    position:absolute; left:1px; right:1px; border-radius:3px;
+    background:repeating-linear-gradient(45deg, rgba(122,111,95,0.18), rgba(122,111,95,0.18) 4px, rgba(122,111,95,0.32) 4px, rgba(122,111,95,0.32) 8px);
+    border:1px solid rgba(122,111,95,0.4); cursor:not-allowed;
+    font-size:0.5rem; color:var(--ink-soft); overflow:hidden; white-space:nowrap; text-align:center; line-height:1.8;
+  }
   .creneau-form{background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:20px; margin-top:20px; display:grid; gap:12px; max-width:400px;}
   .creneau-form label{font-size:0.88rem; font-weight:600; display:grid; gap:4px;}
   .creneau-form input{padding:10px 12px; border:1px solid var(--line-alt); border-radius:8px; font-family:var(--font-texte); font-size:0.95rem; background:var(--bg);}
@@ -221,6 +227,10 @@
 </style>
 </head>
 <body>
+
+<div class="bande-cadre bande-gauche"></div>
+<div class="bande-cadre bande-droite"></div>
+
 
 <header>
   <nav class="nav">
@@ -333,11 +343,6 @@
           <h3 data-text="couple_title">En couple</h3>
           <p data-text="couple_text">Pour ce qui se joue à deux : désaccords de désir, silences installés, retentissement d'un événement de vie sur l'intimité partagée.</p>
         </div>
-        <div class="card" id="approfondissement">
-          <span class="dur">Séance d'approfondissement · 2h</span>
-          <h3 data-text="approfondissement_title">Aller plus loin</h3>
-          <p data-text="approfondissement_text">Pour les moments où une heure ne suffit pas : un travail guidé en visualisation, avec le temps nécessaire pour aller chercher ce qui doit être exploré en profondeur, puis pour revenir et intégrer.</p>
-        </div>
       </div>
       <p style="margin-top:18px; font-size:0.92rem; color:var(--ink-soft);">Vous préférez appeler&nbsp;? <a data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a></p>
     </div>
@@ -350,7 +355,7 @@
       <h2>Choisir un créneau</h2>
       <div class="cal-duree-choix">
         <button type="button" class="cal-duree-btn actif" data-duree="60">1 heure — individuelle, couple ou relaxation</button>
-        <button type="button" class="cal-duree-btn" data-duree="120">2 heures — approfondissement ou relaxation</button>
+        <button type="button" class="cal-duree-btn" data-duree="120">2 heures — relaxation guidée</button>
       </div>
       <div class="cal-entete">
         <button type="button" id="cal-prec" class="cal-nav-btn">← Semaine précédente</button>
@@ -372,7 +377,6 @@
     { valeur: 'individuelle', label: 'Séance individuelle', prix: '60€', duree: 60 },
     { valeur: 'couple', label: 'Séance de couple', prix: '80€', duree: 60 },
     { valeur: 'relaxation1h', label: 'Relaxation / méditation guidée', prix: '20€', duree: 60 },
-    { valeur: 'approfondissement', label: "Séance d'approfondissement", prix: '120€', duree: 120 },
     { valeur: 'relaxation2h', label: 'Relaxation / méditation guidée', prix: '40€', duree: 120 }
   ];
 
@@ -475,7 +479,7 @@
     colonnes.forEach(c => grille.appendChild(c));
 
     let auMoinsUnCreneau = false;
-    const creneauxValides = calCreneauxValidesPourDuree(calCache, calDureeChoisie);
+    const creneauxValides = calCreneauxValidesPourDuree((calCache || {}).libres, calDureeChoisie);
 
     joursDates.forEach((dateStr, idxJour) => {
       const heuresLibres = creneauxValides[dateStr] || [];
@@ -490,6 +494,23 @@
         cellule.style.height = (calDureeChoisie / 30 * 20 - 2) + 'px';
         cellule.title = heure;
         cellule.addEventListener('click', () => calOuvrirFormulaire(dateStr, heure));
+        colonnes[idxJour].appendChild(cellule);
+      });
+    });
+
+    // Créneaux pris par un atelier : affichés, non cliquables
+    const sousReserve = (calCache || {}).sousReserve || {};
+    joursDates.forEach((dateStr, idxJour) => {
+      const heures = sousReserve[dateStr] || [];
+      heures.forEach(heure => {
+        const top = calMinutesDepuisDebut(heure);
+        if (top < 0) return;
+        const cellule = document.createElement('div');
+        cellule.className = 'cal-cellule-reserve';
+        cellule.style.top = (top / 30 * 20) + 'px';
+        cellule.style.height = (30 / 30 * 20 - 2) + 'px';
+        cellule.title = "Sous réserve de disponibilité";
+        cellule.textContent = "Sous réserve";
         colonnes[idxJour].appendChild(cellule);
       });
     });
@@ -614,7 +635,7 @@
       <ul class="deroule-list" style="margin-top:24px;">
         <li><span class="k">Individuel</span><span class="v" data-text="mod_tarif_individuel">60€ — séance individuelle (1h)</span></li>
         <li><span class="k">Couple</span><span class="v" data-text="mod_tarif_couple">80€ — séance de couple (1h)</span></li>
-        <li><span class="k">Approfondissement</span><span class="v" data-text="mod_tarif_approfondissement">120€ — séance d'approfondissement (2h, individuel)</span></li>
+        <li><span class="k">Relaxation guidée</span><span class="v" data-text="mod_tarif_relaxation">20€ (1h) ou 40€ (2h) — thème au choix</span></li>
         <li><span class="k">Lieu</span><span class="v" data-text="mod_lieu">74 rue de Jarlard, 81000 Albi</span></li>
         <li><span class="k">Délai</span><span class="v" data-text="mod_delai">Prise en charge rapide, sans liste d'attente longue</span></li>
         <li><span class="k">Contact</span><span class="v"><a data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a> — <a data-mail="email" data-text="email" href="mailto:payet.julien.msh@gmail.com">payet.julien.msh@gmail.com</a></span></li>

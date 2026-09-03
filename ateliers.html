@@ -51,12 +51,12 @@
   }
 
   /* ---------- Bandes latérales de cadrage ---------- */
-  body::before, body::after{
-    content:""; position:fixed; top:0; bottom:0; width:6px; background:var(--accent);
-    z-index:60; pointer-events:none;
+  .bande-cadre{
+    position:fixed; top:0; bottom:0; width:8px; background:var(--accent);
+    z-index:9999; pointer-events:none;
   }
-  body::before{left:0;}
-  body::after{right:0;}
+  .bande-gauche{left:0;}
+  .bande-droite{right:0;}
 
   .block{padding:88px 0;}
   .block-light{background:var(--bg); color:var(--ink);}
@@ -133,6 +133,10 @@
 </style>
 </head>
 <body>
+
+<div class="bande-cadre bande-gauche"></div>
+<div class="bande-cadre bande-droite"></div>
+
 
 <header>
   <nav class="nav">
@@ -235,8 +239,6 @@
       <div class="cal-scroll"><div class="cal-grille" id="cal-grille"></div></div>
       <div id="cal-formulaire"></div>
       <p class="creneaux-msg" id="cal-msg" style="display:none;"></p>
-      <p class="note-cadre" style="margin-top:24px;">Le paiement (20&nbsp;€ la séance, en groupe ou en individuel) se
-         règle sur place, en espèces ou par chèque.</p>
     </div>
   </section>
 

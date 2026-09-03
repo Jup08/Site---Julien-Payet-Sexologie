@@ -49,12 +49,12 @@
   }
 
   /* ---------- Bandes latérales de cadrage ---------- */
-  body::before, body::after{
-    content:""; position:fixed; top:0; bottom:0; width:6px; background:var(--accent);
-    z-index:60; pointer-events:none;
+  .bande-cadre{
+    position:fixed; top:0; bottom:0; width:8px; background:var(--accent);
+    z-index:9999; pointer-events:none;
   }
-  body::before{left:0;}
-  body::after{right:0;}
+  .bande-gauche{left:0;}
+  .bande-droite{right:0;}
 
   .block{padding:80px 0;}
   .block-light{background:var(--bg);}
@@ -92,6 +92,10 @@
 </style>
 </head>
 <body>
+
+<div class="bande-cadre bande-gauche"></div>
+<div class="bande-cadre bande-droite"></div>
+
 
 <header>
   <nav class="nav">
