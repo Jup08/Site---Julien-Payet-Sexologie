@@ -62,6 +62,7 @@
   .nav{
     display:flex; align-items:center; justify-content:space-between;
     padding:18px clamp(24px, 6vw, 72px); max-width:var(--maxw); margin:0 auto;
+    position:relative;
   }
   .logo{font-family:var(--font-titre); font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
   .navlinks{display:flex; gap:30px; list-style:none; margin:0; padding:0; align-items:center;}
@@ -71,7 +72,31 @@
     background:var(--accent); color:var(--bg); padding:9px 18px; border-radius:30px;
     text-decoration:none; font-weight:600; font-size:0.9rem; white-space:nowrap;
   }
-  @media (max-width:780px){ .navlinks{display:none;} }
+  .nav-droite{display:flex; align-items:center; gap:14px;}
+  .nav-burger{display:none; flex-direction:column; justify-content:center; gap:5px; width:38px; height:38px; background:none; border:1px solid var(--line-alt); border-radius:8px; cursor:pointer; padding:0;}
+  .nav-burger span{display:block; width:18px; height:2px; background:var(--ink); margin:0 auto; transition:transform .2s ease, opacity .2s ease;}
+  .nav-burger.actif span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-burger.actif span:nth-child(2){opacity:0;}
+  .nav-burger.actif span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  @media (max-width:780px){
+    .navlinks{
+      display:none; position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:flex-start; gap:0;
+      background:var(--bg); border-bottom:1px solid var(--line); padding:8px 28px 16px;
+    }
+    .navlinks.ouvert{display:flex;}
+    .navlinks li{width:100%; padding:10px 0; border-bottom:1px solid var(--line);}
+    .navlinks li:last-child{border-bottom:none;}
+    .nav-burger{display:flex;}
+  }
+
+  /* ---------- Bandes latérales de cadrage ---------- */
+  body::before, body::after{
+    content:""; position:fixed; top:0; bottom:0; width:6px; background:var(--accent);
+    z-index:60; pointer-events:none;
+  }
+  body::before{left:0;}
+  body::after{right:0;}
 
   /* ---------- SECTIONS PLEINE LARGEUR (le rythme de blocs) ---------- */
   .block{padding:88px 0;}
@@ -200,16 +225,31 @@
 <header>
   <nav class="nav">
     <a href="#" class="logo">Julien Payet</a>
-    <ul class="navlinks">
+    <ul class="navlinks" id="navlinks">
       <li><a href="#parcours">Séances</a></li>
       <li><a href="ateliers.html">Ateliers</a></li>
       <li><a href="#qui">Qui suis-je</a></li>
       <li><a href="#modalites">Modalités</a></li>
       <li><a href="pro.html">Professionnels</a></li>
     </ul>
-    <a class="navphone" data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a>
+    <div class="nav-droite">
+      <a class="navphone" data-tel="phone" data-text="phone" href="tel:0662648890">06 62 64 88 90</a>
+      <button type="button" class="nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 </header>
+
+<script>
+  const navBurger = document.getElementById('nav-burger');
+  const navLinksMobile = document.getElementById('navlinks');
+  navBurger.addEventListener('click', () => {
+    const ouvert = navLinksMobile.classList.toggle('ouvert');
+    navBurger.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+    navBurger.classList.toggle('actif', ouvert);
+  });
+</script>
 
 <main>
   <section class="wrap hero block-light" style="padding:120px 0 96px;">
@@ -325,7 +365,7 @@
 
   <script>
   // MODIFIEZ ICI : la MÊME URL que celle utilisée dans ateliers.html
-  const URL_AGENDA = "https://script.google.com/macros/s/AKfycbwUKyPQJd8l6I3qDDa6AE9mkItRlwQYx4Pq94WVgOytFhX5CUs_gRNbZo53A0d3flCCog/exec";
+  const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
   const CAL_HEURE_DEBUT = 8, CAL_HEURE_FIN = 21;
   const CAL_JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
   const CAL_TYPES = [
@@ -454,10 +494,12 @@
       });
     });
 
+    const msg = document.getElementById('cal-msg');
     if (!auMoinsUnCreneau) {
-      const msg = document.getElementById('cal-msg');
       msg.style.display = 'block';
       msg.textContent = "Aucun créneau disponible cette semaine — essayez la semaine suivante, ou appelez au 06 62 64 88 90.";
+    } else {
+      msg.style.display = 'none';
     }
   }
 

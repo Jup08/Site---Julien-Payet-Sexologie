@@ -26,13 +26,37 @@
   .eyebrow{font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; display:inline-block; margin-bottom:14px;}
 
   header{position:sticky; top:0; z-index:50; background:rgba(250,246,239,0.92); backdrop-filter:saturate(140%) blur(6px); border-bottom:1px solid var(--line);}
-  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px clamp(24px, 6vw, 72px); max-width:var(--maxw); margin:0 auto;}
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px clamp(24px, 6vw, 72px); max-width:var(--maxw); margin:0 auto; position:relative;}
   .logo{font-family:var(--font-titre); font-size:1.25rem; font-weight:600; color:var(--ink); text-decoration:none;}
   .navlinks{display:flex; gap:30px; list-style:none; margin:0; padding:0; align-items:center;}
   .navlinks a{text-decoration:none; font-size:0.95rem; color:var(--ink); font-weight:500;}
   .navlinks a:hover{color:var(--accent);}
   .navphone{background:var(--accent); color:var(--bg); padding:9px 18px; border-radius:30px; text-decoration:none; font-weight:600; font-size:0.9rem; white-space:nowrap;}
-  @media (max-width:780px){ .navlinks{display:none;} }
+  .nav-droite{display:flex; align-items:center; gap:14px;}
+  .nav-burger{display:none; flex-direction:column; justify-content:center; gap:5px; width:38px; height:38px; background:none; border:1px solid var(--line-alt); border-radius:8px; cursor:pointer; padding:0;}
+  .nav-burger span{display:block; width:18px; height:2px; background:var(--ink); margin:0 auto; transition:transform .2s ease, opacity .2s ease;}
+  .nav-burger.actif span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-burger.actif span:nth-child(2){opacity:0;}
+  .nav-burger.actif span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  @media (max-width:780px){
+    .navlinks{
+      display:none; position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:flex-start; gap:0;
+      background:var(--bg); border-bottom:1px solid var(--line); padding:8px 28px 16px;
+    }
+    .navlinks.ouvert{display:flex;}
+    .navlinks li{width:100%; padding:10px 0; border-bottom:1px solid var(--line);}
+    .navlinks li:last-child{border-bottom:none;}
+    .nav-burger{display:flex;}
+  }
+
+  /* ---------- Bandes latérales de cadrage ---------- */
+  body::before, body::after{
+    content:""; position:fixed; top:0; bottom:0; width:6px; background:var(--accent);
+    z-index:60; pointer-events:none;
+  }
+  body::before{left:0;}
+  body::after{right:0;}
 
   .block{padding:88px 0;}
   .block-light{background:var(--bg); color:var(--ink);}
@@ -113,16 +137,31 @@
 <header>
   <nav class="nav">
     <a href="index.html" class="logo">Julien Payet</a>
-    <ul class="navlinks">
+    <ul class="navlinks" id="navlinks">
       <li><a href="index.html#parcours">Séances</a></li>
       <li><a href="ateliers.html">Ateliers</a></li>
       <li><a href="index.html#qui">Qui suis-je</a></li>
       <li><a href="index.html#modalites">Modalités</a></li>
       <li><a href="pro.html">Professionnels</a></li>
     </ul>
-    <a class="navphone" href="tel:0662648890">06 62 64 88 90</a>
+    <div class="nav-droite">
+      <a class="navphone" href="tel:0662648890">06 62 64 88 90</a>
+      <button type="button" class="nav-burger" id="nav-burger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </nav>
 </header>
+
+<script>
+  const navBurger = document.getElementById('nav-burger');
+  const navLinksMobile = document.getElementById('navlinks');
+  navBurger.addEventListener('click', () => {
+    const ouvert = navLinksMobile.classList.toggle('ouvert');
+    navBurger.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
+    navBurger.classList.toggle('actif', ouvert);
+  });
+</script>
 
 <main>
 
@@ -139,7 +178,7 @@
       <div class="infos-cle">
         <span>1&nbsp;h</span>
         <span>4&nbsp;personnes max.</span>
-        <span data-text="ate_tarif">10 à 15&nbsp;€ la séance</span>
+        <span data-text="ate_tarif">20&nbsp;€ la séance — en groupe ou en individuel</span>
       </div>
       <p style="max-width:640px; margin-top:6px;">Les prochaines dates de chaque atelier sont
          publiées juste en dessous — réservez directement depuis cette page, sans redirection.</p>
@@ -196,14 +235,14 @@
       <div class="cal-scroll"><div class="cal-grille" id="cal-grille"></div></div>
       <div id="cal-formulaire"></div>
       <p class="creneaux-msg" id="cal-msg" style="display:none;"></p>
-      <p class="note-cadre" style="margin-top:24px;">Le paiement (10 à 15&nbsp;€ selon l'atelier) se
+      <p class="note-cadre" style="margin-top:24px;">Le paiement (20&nbsp;€ la séance, en groupe ou en individuel) se
          règle sur place, en espèces ou par chèque.</p>
     </div>
   </section>
 
   <script>
   // MODIFIEZ ICI : collez l'URL de votre application web Google Apps Script
-  const URL_AGENDA = "https://script.google.com/macros/s/AKfycbwUKyPQJd8l6I3qDDa6AE9mkItRlwQYx4Pq94WVgOytFhX5CUs_gRNbZo53A0d3flCCog/exec";
+  const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
   const CAL_CATEGORIE = 'atelier';
   const CAL_HEURE_DEBUT = 8, CAL_HEURE_FIN = 21;
   const CAL_JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
@@ -283,24 +322,46 @@
 
     const creneauxSemaine = (calCache || []).filter(c => joursDates.includes(c.date));
 
+    const msg = document.getElementById('cal-msg');
     if (!creneauxSemaine.length) {
-      const msg = document.getElementById('cal-msg');
       msg.style.display = 'block';
       msg.textContent = "Aucun créneau disponible cette semaine — essayez la semaine suivante, ou appelez au 06 62 64 88 90.";
+    } else {
+      msg.style.display = 'none';
     }
 
+    // Regroupe par jour, puis par horaire exact, pour afficher côte à côte
+    // les créneaux qui se chevauchent (ex. Groupe Hommes et Femmes au même
+    // horaire) plutôt que de les superposer.
+    const parJourEtHeure = {};
     creneauxSemaine.forEach(c => {
       const idxJour = joursDates.indexOf(c.date);
-      const top = calMinutesDepuisDebut(c.heure);
-      if (top < 0) return;
-      const bloc = document.createElement('button');
-      bloc.type = 'button';
-      bloc.className = 'cal-bloc';
-      bloc.style.top = (top / 30 * 20) + 'px';
-      bloc.style.height = Math.max(90 / 30 * 20 - 2, 16) + 'px'; // hauteur généreuse, ateliers 60-90 min
-      bloc.innerHTML = `<strong>${c.heure}</strong>${c.intitule} (${c.placesRestantes} pl.)`;
-      bloc.addEventListener('click', () => calOuvrirFormulaire(c));
-      colonnes[idxJour].appendChild(bloc);
+      if (!parJourEtHeure[idxJour]) parJourEtHeure[idxJour] = {};
+      if (!parJourEtHeure[idxJour][c.heure]) parJourEtHeure[idxJour][c.heure] = [];
+      parJourEtHeure[idxJour][c.heure].push(c);
+    });
+
+    Object.keys(parJourEtHeure).forEach(idxJourStr => {
+      const idxJour = Number(idxJourStr);
+      Object.keys(parJourEtHeure[idxJour]).forEach(heure => {
+        const items = parJourEtHeure[idxJour][heure];
+        const largeur = 100 / items.length;
+        items.forEach((c, i) => {
+          const top = calMinutesDepuisDebut(c.heure);
+          if (top < 0) return;
+          const bloc = document.createElement('button');
+          bloc.type = 'button';
+          bloc.className = 'cal-bloc';
+          bloc.style.top = (top / 30 * 20) + 'px';
+          bloc.style.height = Math.max(90 / 30 * 20 - 2, 16) + 'px';
+          bloc.style.left = 'calc(' + (i * largeur) + '% + 2px)';
+          bloc.style.right = 'auto';
+          bloc.style.width = 'calc(' + largeur + '% - 4px)';
+          bloc.innerHTML = `<strong>${c.heure}</strong>${c.intitule} (${c.placesRestantes} pl.)`;
+          bloc.addEventListener('click', () => calOuvrirFormulaire(c));
+          colonnes[idxJour].appendChild(bloc);
+        });
+      });
     });
   }
 
