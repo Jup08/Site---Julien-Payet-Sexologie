@@ -309,8 +309,8 @@
       <span class="eyebrow">Réservation en ligne</span>
       <h2>Choisir un créneau</h2>
       <div class="cal-duree-choix">
-        <button type="button" class="cal-duree-btn actif" data-duree="60">1 heure — individuelle ou couple</button>
-        <button type="button" class="cal-duree-btn" data-duree="120">2 heures — approfondissement</button>
+        <button type="button" class="cal-duree-btn actif" data-duree="60">1 heure — individuelle, couple ou relaxation</button>
+        <button type="button" class="cal-duree-btn" data-duree="120">2 heures — approfondissement ou relaxation</button>
       </div>
       <div class="cal-entete">
         <button type="button" id="cal-prec" class="cal-nav-btn">← Semaine précédente</button>
@@ -325,13 +325,15 @@
 
   <script>
   // MODIFIEZ ICI : la MÊME URL que celle utilisée dans ateliers.html
-  const URL_AGENDA = "https://script.google.com/macros/s/AKfycbwUKyPQJd8l6I3qDDa6AE9mkItRlwQYx4Pq94WVgOytFhX5CUs_gRNbZo53A0d3flCCog/exec";
+  const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
   const CAL_HEURE_DEBUT = 8, CAL_HEURE_FIN = 21;
   const CAL_JOURS = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
   const CAL_TYPES = [
-    { valeur: 'individuelle', label: 'Séance individuelle', prix: '60€' },
-    { valeur: 'couple', label: 'Séance de couple', prix: '80€' },
-    { valeur: 'approfondissement', label: "Séance d'approfondissement", prix: '120€' }
+    { valeur: 'individuelle', label: 'Séance individuelle', prix: '60€', duree: 60 },
+    { valeur: 'couple', label: 'Séance de couple', prix: '80€', duree: 60 },
+    { valeur: 'relaxation1h', label: 'Relaxation / méditation guidée', prix: '20€', duree: 60 },
+    { valeur: 'approfondissement', label: "Séance d'approfondissement", prix: '120€', duree: 120 },
+    { valeur: 'relaxation2h', label: 'Relaxation / méditation guidée', prix: '40€', duree: 120 }
   ];
 
   let calSemaine = null;
@@ -465,37 +467,24 @@
     const form = document.createElement('form');
     form.className = 'creneau-form';
 
-    if (calDureeChoisie === 120) {
-      // Une seule option à 2h : on saute directement à approfondissement
-      form.innerHTML = `
-        <p style="font-weight:600; margin:0 0 10px;">Séance d'approfondissement — ${date} à ${heure}</p>
-        <input type="hidden" name="type" value="approfondissement">
-        <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
-        <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
-        <label>Email<input type="email" name="email" required autocomplete="email"></label>
-        <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
-        <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
-        <p class="creneau-form-msg"></p>
-      `;
-    } else {
-      const typesUneHeure = CAL_TYPES.filter(t => t.valeur !== 'approfondissement');
-      const boutonsType = typesUneHeure.map(t =>
-        `<button type="button" class="cal-type-btn" data-type="${t.valeur}">${t.label} — ${t.prix}</button>`
-      ).join('');
+    const typesPourCetteDuree = CAL_TYPES.filter(t => t.duree === calDureeChoisie);
+    const boutonsType = typesPourCetteDuree.map(t =>
+      `<button type="button" class="cal-type-btn" data-type="${t.valeur}">${t.label} — ${t.prix}</button>`
+    ).join('');
 
-      form.innerHTML = `
-        <p style="font-weight:600; margin:0 0 10px;">${date} à ${heure}</p>
-        <p style="font-size:0.88rem; font-weight:600; margin:0 0 8px;">Individuelle ou couple ?</p>
-        <div class="cal-type-choix">${boutonsType}</div>
-        <input type="hidden" name="type" required>
-        <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
-        <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
-        <label>Email<input type="email" name="email" required autocomplete="email"></label>
-        <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
-        <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
-        <p class="creneau-form-msg"></p>
-      `;
-    }
+    form.innerHTML = `
+      <p style="font-weight:600; margin:0 0 10px;">${date} à ${heure}</p>
+      <p style="font-size:0.88rem; font-weight:600; margin:0 0 8px;">Quel type de séance ?</p>
+      <div class="cal-type-choix">${boutonsType}</div>
+      <input type="hidden" name="type" required>
+      <input type="text" name="siteWeb" style="display:none" tabindex="-1" autocomplete="off">
+      <label>Nom<input type="text" name="nom" required autocomplete="name"></label>
+      <label>Email<input type="email" name="email" required autocomplete="email"></label>
+      <label>Téléphone (facultatif)<input type="tel" name="telephone" autocomplete="tel"></label>
+      <label>Thème souhaité (facultatif — pour la relaxation/méditation)<input type="text" name="theme" autocomplete="off" placeholder="ex. sommeil, confiance en soi, gestion du stress…"></label>
+      <button class="btn btn-primary" type="submit">Confirmer la réservation</button>
+      <p class="creneau-form-msg"></p>
+    `;
 
     form.querySelectorAll('.cal-type-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -514,7 +503,7 @@
       }
       msgEl.textContent = "Envoi en cours…";
       const data = {
-        mode: 'libre', date, heure, type: form.type.value,
+        mode: 'libre', date, heure, type: form.type.value, theme: form.theme.value,
         nom: form.nom.value, email: form.email.value,
         telephone: form.telephone.value, siteWeb: form.siteWeb.value
       };

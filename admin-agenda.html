@@ -10,7 +10,7 @@
 <style>
   :root{
     --bg:#FAF6EF; --ink:#3A2E22; --ink-soft:#7A6F5F; --accent:#2C3C33; --line:#E1D8C5;
-    --c-indiv:#2a78d6; --c-couple:#4a3aa7; --c-atelier:#1baf7a; --c-blocage:#7A6F5F;
+    --c-indiv:#1baf7a; --c-couple:#4a3aa7; --c-atelier:#c0392b; --c-blocage:#2a78d6;
   }
   *{box-sizing:border-box;}
   body{margin:0; background:var(--bg); color:var(--ink); font-family:'Public Sans', sans-serif;}
@@ -76,10 +76,10 @@
     <div>
       <h1>Vue d'ensemble</h1>
       <div class="legende">
-        <span><i style="background:var(--c-indiv)"></i>Individuelle</span>
+        <span><i style="background:var(--c-indiv)"></i>Individuelle / relaxation</span>
         <span><i style="background:var(--c-couple)"></i>Couple</span>
         <span><i style="background:var(--c-atelier)"></i>Atelier</span>
-        <span><i style="background:var(--c-blocage)"></i>Bloqué / autre</span>
+        <span><i style="background:var(--c-blocage)"></i>Créneau réservé (perso)</span>
       </div>
     </div>
     <div class="nav-semaine">
@@ -95,7 +95,7 @@
 
 <script>
 // MODIFIEZ ICI : la MÊME URL d'application web que celle utilisée dans ateliers.html et index.html
-const URL_AGENDA = "https://script.google.com/macros/s/AKfycbwUKyPQJd8l6I3qDDa6AE9mkItRlwQYx4Pq94WVgOytFhX5CUs_gRNbZo53A0d3flCCog/exec";
+const URL_AGENDA = "https://script.google.com/macros/s/VOTRE-ID-DE-DEPLOIEMENT/exec";
 
 const HEURE_DEBUT_GRILLE = 8;   // 8h du matin
 const HEURE_FIN_GRILLE = 21;    // 21h
@@ -227,7 +227,7 @@ function afficherGrille(data) {
     ajouterBloc(r.date, r.heure, r.dureeMinutes, classe, `<strong>${r.titre}</strong>`);
   });
   data.blocages.forEach(b => {
-    ajouterBloc(b.date, b.heure, b.dureeMinutes, 'blocage', `<strong>${b.titre}</strong>`);
+    ajouterBloc(b.date, b.heure, b.dureeMinutes, 'blocage', `<strong>Créneau réservé</strong>`);
   });
 
   if (!data.creneaux.length && !data.reservationsLibres.length && !data.blocages.length) {

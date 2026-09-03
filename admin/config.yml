@@ -130,4 +130,5 @@ collections:
           - { label: "Carte Ouverts — badge", name: "ouverts_badge", widget: "string" }
           - { label: "Carte Ouverts — titre", name: "ouverts_title", widget: "string" }
           - { label: "Carte Ouverts — description", name: "ouverts_text", widget: "text" }
+          - { label: "Annonce — futurs ateliers de visualisation", name: "annonce_visualisation", widget: "text" }
           - { label: "Note bien-être (bas de page)", name: "ate_note", widget: "text" }
